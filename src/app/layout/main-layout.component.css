@@ -21,6 +21,19 @@
   flex-shrink: 0;
 }
 
+.header-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: -6px;
+  border-radius: 8px;
+  color: var(--color-on-dark);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .header-brand {
   display: flex;
   align-items: center;

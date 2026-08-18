@@ -1,8 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import {
+  NavigationEnd,
+  NavigationStart,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { filter } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PageHeaderService } from '../shared/services/page-header.service';
 
 interface NavItem {
   path: string;
@@ -25,7 +33,8 @@ const PAGE_TITLES: Record<string, string> = {
   styleUrl: './main-layout.component.css',
 })
 export class MainLayoutComponent {
-  private router = inject(Router);
+  private readonly router = inject(Router);
+  private readonly pageHeader = inject(PageHeaderService);
 
   readonly navItems: NavItem[] = [
     { path: '/dashboard', label: 'Inicio', icon: 'home' },
@@ -34,10 +43,23 @@ export class MainLayoutComponent {
     { path: '/payments', label: 'Pagos', icon: 'account_balance_wallet' },
   ];
 
-  readonly pageTitle = signal('Inicio');
+  private readonly routeTitle = signal('Inicio');
+
+  /** Lo que fije la página gana sobre el título derivado de la ruta. */
+  readonly pageTitle = computed(() => this.pageHeader.title() ?? this.routeTitle());
+  readonly backLink = this.pageHeader.backLink;
 
   constructor() {
-    this.updatePageTitle(this.router.url);
+    this.updateRouteTitle(this.router.url);
+
+    // Se limpia al arrancar la navegación, antes de que la página entrante
+    // se construya y fije lo suyo.
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationStart),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.pageHeader.clear());
 
     this.router.events
       .pipe(
@@ -45,12 +67,12 @@ export class MainLayoutComponent {
         takeUntilDestroyed(),
       )
       .subscribe((event) => {
-        this.updatePageTitle((event as NavigationEnd).urlAfterRedirects);
+        this.updateRouteTitle((event as NavigationEnd).urlAfterRedirects);
       });
   }
 
-  private updatePageTitle(url: string): void {
+  private updateRouteTitle(url: string): void {
     const path = url.split('?')[0];
-    this.pageTitle.set(PAGE_TITLES[path] ?? 'RODI GYM');
+    this.routeTitle.set(PAGE_TITLES[path] ?? 'RODI GYM');
   }
 }
