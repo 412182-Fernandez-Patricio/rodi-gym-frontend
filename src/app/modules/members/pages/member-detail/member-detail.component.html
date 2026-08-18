@@ -1,0 +1,36 @@
+@if (loadFailed()) {
+  <p class="message">No se pudo cargar el socio.</p>
+} @else if (member(); as member) {
+  <section class="profile" [class.inactive]="status() === 'inactive'" [class.expired]="status() === 'expired'">
+    <span
+      class="status"
+      [class.status-active]="status() === 'active'"
+      [class.status-expired]="status() === 'expired'"
+      [class.status-inactive]="status() === 'inactive'">
+      {{ statusLabel() }}
+    </span>
+
+    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+    <h1 class="name">{{ fullName() }}</h1>
+    <p class="dni">DNI: {{ dni() }}</p>
+
+    @if (expiration(); as expiration) {
+      @if (status() === 'expired'){
+        <p class="expiration">Venció el {{ expiration }}</p>
+      } @else {
+        <p class="expiration">Vence el {{ expiration }}</p>
+      }
+    } @else {
+      <p class="expiration">Sin membresía registrada</p>
+    }
+  </section>
+
+  <!--
+    Espacio reservado para las dos secciones del mock, que todavía no tienen
+    endpoint en el backend:
+      - ASISTENCIA (mes): necesita los check-ins de un socio por rango de fechas.
+      - ÚLTIMOS PAGOS: necesita un GET de pagos por socio.
+  -->
+} @else {
+  <p class="message">Cargando…</p>
+}

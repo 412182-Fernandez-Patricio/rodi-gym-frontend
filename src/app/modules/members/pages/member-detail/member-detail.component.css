@@ -1,0 +1,85 @@
+.profile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 20px;
+  border-radius: 14px;
+  background: var(--color-accent-soft);
+  text-align: center;
+}
+
+.profile.inactive {
+  background: var(--color-neutral-soft);
+}
+
+.profile.expired {
+  background: var(--color-danger-soft);
+}
+
+.status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background: var(--color-surface);
+  color: var(--color-accent-strong);
+}
+
+.status-expired {
+  background: var(--color-surface);
+  color: var(--color-danger-strong);
+}
+
+.status-inactive {
+  background: var(--color-border);
+  color: var(--color-muted);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.name {
+  margin: 12px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-ink-strong);
+}
+
+.dni {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.expiration {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.message {
+  margin: 32px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-muted);
+}

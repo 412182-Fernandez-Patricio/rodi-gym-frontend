@@ -61,3 +61,14 @@ function currentIsoDate(): string {
   const day = `${now.getDate()}`.padStart(2, '0');
   return `${now.getFullYear()}-${month}-${day}`;
 }
+
+/** Pasa una fecha ISO a dd/mm/aaaa sin construir un Date, por la zona horaria. */
+export function formatIsoDate(iso: string): string {
+  const [year, month, day] = iso.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+/** Formatea un DNI con puntos: 28541987 -> 28.541.987 */
+export function formatDni(dni: number): string {
+  return dni.toLocaleString('es-AR');
+}

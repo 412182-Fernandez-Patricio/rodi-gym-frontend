@@ -1,16 +1,18 @@
 <article class="member-card" [class.inactive]="status() === 'inactive'">
-  <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+  <a class="summary" [routerLink]="['/members', member().id]">
+    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
 
-  <div class="details">
-    <p class="name">{{ fullName() }}</p>
-    <span
-      class="badge"
-      [class.badge-active]="status() === 'active'"
-      [class.badge-expired]="status() === 'expired'"
-      [class.badge-inactive]="status() === 'inactive'">
-      {{ statusLabel() }}
+    <span class="details">
+      <span class="name">{{ fullName() }}</span>
+      <span
+        class="badge"
+        [class.badge-active]="status() === 'active'"
+        [class.badge-expired]="status() === 'expired'"
+        [class.badge-inactive]="status() === 'inactive'">
+        {{ statusLabel() }}
+      </span>
     </span>
-  </div>
+  </a>
 
   @if (status() !== 'inactive') {
     <button

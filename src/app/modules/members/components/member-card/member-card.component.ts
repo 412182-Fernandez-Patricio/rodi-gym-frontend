@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { Member, MemberStatus, resolveMemberStatus } from '../../models/member.model';
 
 const STATUS_LABELS: Record<MemberStatus, string> = {
@@ -11,7 +12,7 @@ const STATUS_LABELS: Record<MemberStatus, string> = {
 @Component({
   selector: 'app-member-card',
   standalone: true,
-  imports: [MatIconModule],
+  imports: [MatIconModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './member-card.component.html',
   styleUrl: './member-card.component.css',

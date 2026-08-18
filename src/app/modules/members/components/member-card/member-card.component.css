@@ -17,6 +17,17 @@
   border-color: transparent;
 }
 
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .avatar {
   display: flex;
   align-items: center;
@@ -32,7 +43,18 @@
   letter-spacing: 0.02em;
 }
 
-.member-card.inactive .avatar {
+.member-card.inactive .summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.avatar {
   color: var(--color-muted);
 }
 

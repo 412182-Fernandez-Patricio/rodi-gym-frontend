@@ -14,4 +14,10 @@ export class MemberService {
       .get<MemberDto[]>(this.baseUrl)
       .pipe(map((dtos) => dtos.map(mapMemberFromDto)));
   }
+
+  getMember(id: number): Observable<Member> {
+    return this.http
+      .get<MemberDto>(`${this.baseUrl}/${id}`)
+      .pipe(map(mapMemberFromDto));
+  }
 }
