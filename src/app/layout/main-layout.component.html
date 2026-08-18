@@ -5,7 +5,7 @@
         [routerLink]="target"
         aria-label="Volver"
         class="-ml-1.5 flex h-8 w-8 items-center justify-center rounded-lg text-on-dark no-underline [-webkit-tap-highlight-color:transparent]">
-        <mat-icon>arrow_back</mat-icon>
+        <app-icon name="arrow_back" />
       </a>
       <span class="text-[15px] font-medium text-white/90">{{ pageTitle() }}</span>
     } @else {
@@ -13,7 +13,7 @@
         <span
           class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent"
           aria-hidden="true">
-          <mat-icon class="h-[18px] w-[18px] text-[18px] text-on-dark">fitness_center</mat-icon>
+          <app-icon name="fitness_center" class="h-[18px] w-[18px] text-[18px] text-on-dark" />
         </span>
         <span class="text-[15px] font-bold tracking-[0.02em]">RODI GYM</span>
       </div>
@@ -35,9 +35,9 @@
         routerLinkActive="is-active font-bold text-ink-strong"
         [attr.aria-label]="item.label"
         class="group flex flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-muted no-underline transition-colors [-webkit-tap-highlight-color:transparent]">
-        <mat-icon class="group-[.is-active]:[font-variation-settings:'FILL'_1]">
-          {{ item.icon }}
-        </mat-icon>
+        <app-icon
+          [name]="item.icon"
+          class="group-[.is-active]:[font-variation-settings:'FILL'_1]" />
         <span>{{ item.label }}</span>
       </a>
     }

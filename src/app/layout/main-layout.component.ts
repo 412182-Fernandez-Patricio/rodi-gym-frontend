@@ -7,7 +7,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { IconComponent } from '../shared/components/icon/icon.component';
 import { filter } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageHeaderService } from '../shared/services/page-header.service';
@@ -28,7 +28,7 @@ const PAGE_TITLES: Record<string, string> = {
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, IconComponent],
   templateUrl: './main-layout.component.html',
   host: { class: 'block h-full' },
 })

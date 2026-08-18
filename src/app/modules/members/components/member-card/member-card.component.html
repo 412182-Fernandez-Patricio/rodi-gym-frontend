@@ -16,7 +16,7 @@
       (click)="contact.emit(member())"
       [attr.aria-label]="'Contactar a ' + fullName()"
       class="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border-[1.5px] border-accent bg-transparent p-0 text-accent transition-colors duration-150 [-webkit-tap-highlight-color:transparent] active:bg-accent-soft">
-      <mat-icon class="h-[18px] w-[18px] text-[18px]">chat_bubble_outline</mat-icon>
+      <app-icon name="chat_bubble_outline" class="h-[18px] w-[18px] text-[18px]" />
     </button>
   }
 </article>

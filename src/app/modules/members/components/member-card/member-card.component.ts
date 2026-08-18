@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { RouterLink } from '@angular/router';
 import { Member, MemberStatus, resolveMemberStatus } from '../../models/member.model';
 
@@ -18,7 +18,7 @@ const BADGE_COLORS: Record<MemberStatus, string> = {
 @Component({
   selector: 'app-member-card',
   standalone: true,
-  imports: [MatIconModule, RouterLink],
+  imports: [IconComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   templateUrl: './member-card.component.html',
