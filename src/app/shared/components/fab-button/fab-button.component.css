@@ -1,0 +1,32 @@
+.fab {
+  position: fixed;
+  bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 12px);
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  background: var(--color-accent);
+  color: var(--color-on-dark);
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.45);
+  cursor: pointer;
+  z-index: 101;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fab mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  font-weight: 700;
+}
+
+.fab:active {
+  transform: scale(0.95);
+}

@@ -1,0 +1,9 @@
+@if (link(); as target) {
+  <a class="fab" [routerLink]="target" [attr.aria-label]="label()">
+    <mat-icon>{{ icon() }}</mat-icon>
+  </a>
+} @else {
+  <button type="button" class="fab" (click)="action.emit()" [attr.aria-label]="label()">
+    <mat-icon>{{ icon() }}</mat-icon>
+  </button>
+}
