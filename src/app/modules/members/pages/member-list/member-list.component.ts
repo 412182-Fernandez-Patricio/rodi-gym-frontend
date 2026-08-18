@@ -9,38 +9,8 @@ import { MemberService } from '../../services/member.service';
   selector: 'app-member-list',
   standalone: true,
   imports: [MemberCardComponent],
-  template: `
-    @if (loadFailed()) {
-      <p class="message">No se pudieron cargar los socios.</p>
-    } @else if (members().length) {
-      <ul class="member-list">
-        @for (member of members(); track member.id) {
-          <li>
-            <app-member-card [member]="member" />
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="message">Todavía no hay socios para mostrar.</p>
-    }
-  `,
-  styles: `
-    .member-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .message {
-      margin: 32px 0;
-      text-align: center;
-      font-size: 14px;
-      color: var(--color-muted);
-    }
-  `,
+  templateUrl: './member-list.component.html',
+  styleUrl: './member-list.component.css',
 })
 export class MemberListComponent {
   private readonly memberService = inject(MemberService);

@@ -1,0 +1,33 @@
+<div class="app-shell">
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="brand-icon" aria-hidden="true">
+        <mat-icon>fitness_center</mat-icon>
+      </span>
+      <span class="brand-text">RODI GYM</span>
+    </div>
+    <span class="header-divider">|</span>
+    <span class="header-page">{{ pageTitle() }}</span>
+  </header>
+
+  <main class="app-content">
+    <router-outlet />
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    @for (item of navItems; track item.path) {
+      <a
+        class="bottom-nav-item"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [attr.aria-label]="item.label">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <a class="fab-pay" routerLink="/payments" aria-label="Registrar pago rápido">
+    <mat-icon>attach_money</mat-icon>
+  </a>
+</div>
