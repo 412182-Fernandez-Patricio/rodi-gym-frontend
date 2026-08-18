@@ -66,7 +66,7 @@ const PAGE_TITLES: Record<string, string> = {
       display: flex;
       flex-direction: column;
       height: 100%;
-      background: #f8fafc;
+      background: var(--color-bg);
       position: relative;
     }
 
@@ -75,8 +75,8 @@ const PAGE_TITLES: Record<string, string> = {
       align-items: center;
       gap: 8px;
       padding: 14px 16px;
-      background: #1a2332;
-      color: #fff;
+      background: var(--color-ink);
+      color: var(--color-on-dark);
       flex-shrink: 0;
     }
 
@@ -93,14 +93,14 @@ const PAGE_TITLES: Record<string, string> = {
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: #22c55e;
+      background: var(--color-accent);
     }
 
     .brand-icon mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
-      color: #fff;
+      color: var(--color-on-dark);
     }
 
     .brand-text {
@@ -136,8 +136,8 @@ const PAGE_TITLES: Record<string, string> = {
       align-items: stretch;
       justify-content: space-around;
       height: 64px;
-      background: #fff;
-      border-top: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
       z-index: 100;
       padding-bottom: env(safe-area-inset-bottom, 0);
     }
@@ -150,7 +150,7 @@ const PAGE_TITLES: Record<string, string> = {
       justify-content: center;
       gap: 2px;
       text-decoration: none;
-      color: #94a3b8;
+      color: var(--color-muted);
       font-size: 11px;
       font-weight: 500;
       transition: color 0.15s ease;
@@ -164,7 +164,7 @@ const PAGE_TITLES: Record<string, string> = {
     }
 
     .bottom-nav-item.active {
-      color: #0f172a;
+      color: var(--color-ink-strong);
       font-weight: 700;
     }
 
@@ -182,8 +182,8 @@ const PAGE_TITLES: Record<string, string> = {
       width: 56px;
       height: 56px;
       border-radius: 16px;
-      background: #22c55e;
-      color: #fff;
+      background: var(--color-accent);
+      color: var(--color-on-dark);
       text-decoration: none;
       box-shadow: 0 4px 14px rgba(34, 197, 94, 0.45);
       z-index: 101;
