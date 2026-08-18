@@ -1,17 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import "@angular/material/prebuilt-themes/azure-blue.css";
+@import "tailwindcss";
 
-:root {
-  /* Paleta base */
+/*
+ * Los tokens --color-* de @theme generan utilidades solas: --color-accent
+ * habilita bg-accent, text-accent, border-accent, etc. Además quedan
+ * publicados como custom properties, así que el CSS que todavía use
+ * var(--color-accent) sigue funcionando.
+ */
+@theme {
   --color-bg: #f8fafc;
   --color-surface: #ffffff;
   --color-on-dark: #ffffff;
   --color-ink: #1a2332;
   --color-ink-strong: #0f172a;
   --color-muted: #94a3b8;
-  --color-border: #e2e8f0;
+  --color-line: #e2e8f0;
 
-  /* Estados */
   --color-accent: #22c55e;
   --color-accent-soft: #dcfce7;
   --color-accent-strong: #15803d;
@@ -19,18 +24,21 @@
   --color-danger-soft: #fee2e2;
   --color-danger-strong: #b91c1c;
   --color-neutral-soft: #f1f5f9;
+}
 
-  /* Material toma los colores de la paleta de arriba */
+/* Material toma los colores de la paleta de arriba. */
+:root {
   --mat-sys-primary: var(--color-accent);
   --mat-sys-on-primary: var(--color-on-dark);
   --mat-sys-surface: var(--color-surface);
   --mat-sys-background: var(--color-bg);
   --mat-sys-on-surface: var(--color-ink);
   --mat-sys-error: var(--color-danger);
-  --mat-sys-outline: var(--color-border);
+  --mat-sys-outline: var(--color-line);
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 

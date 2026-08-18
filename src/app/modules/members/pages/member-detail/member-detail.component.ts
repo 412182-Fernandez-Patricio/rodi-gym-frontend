@@ -18,12 +18,17 @@ const STATUS_LABELS: Record<MemberStatus, string> = {
   inactive: 'Inactivo',
 };
 
+const STATUS_COLORS: Record<MemberStatus, string> = {
+  active: 'bg-surface text-accent-strong',
+  expired: 'bg-danger-soft text-danger-strong',
+  inactive: 'bg-line text-muted',
+};
+
 @Component({
   selector: 'app-member-detail',
   standalone: true,
   imports: [],
   templateUrl: './member-detail.component.html',
-  styleUrl: './member-detail.component.css',
 })
 export class MemberDetailComponent {
   private readonly route = inject(ActivatedRoute);
@@ -70,6 +75,20 @@ export class MemberDetailComponent {
   readonly expiration = computed(() => {
     const member = this.member();
     return member?.expirationDate ? formatIsoDate(member.expirationDate) : null;
+  });
+
+  readonly profileClass = computed(
+    () =>
+      'relative flex flex-col items-center rounded-[14px] px-4 pt-6 pb-5 text-center ' +
+      (this.status() === 'inactive' ? 'bg-neutral-soft' : 'bg-accent-soft'),
+  );
+
+  readonly statusClass = computed(() => {
+    const status = this.status();
+    return (
+      'absolute top-3 right-3 rounded-md px-2 py-0.5 text-[10px] font-bold tracking-[0.04em] uppercase ' +
+      (status ? STATUS_COLORS[status] : '')
+    );
   });
 
   constructor() {

@@ -11,7 +11,6 @@ import { MemberService } from '../../services/member.service';
   standalone: true,
   imports: [MemberCardComponent, FabButtonComponent],
   templateUrl: './member-list.component.html',
-  styleUrl: './member-list.component.css',
 })
 export class MemberListComponent {
   private readonly memberService = inject(MemberService);

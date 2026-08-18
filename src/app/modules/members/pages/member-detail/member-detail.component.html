@@ -1,27 +1,22 @@
 @if (loadFailed()) {
-  <p class="message">No se pudo cargar el socio.</p>
+  <p class="my-8 text-center text-sm text-muted">No se pudo cargar el socio.</p>
 } @else if (member(); as member) {
-  <section class="profile" [class.inactive]="status() === 'inactive'" [class.expired]="status() === 'expired'">
+  <section [class]="profileClass()">
+    <span [class]="statusClass()">{{ statusLabel() }}</span>
+
     <span
-      class="status"
-      [class.status-active]="status() === 'active'"
-      [class.status-expired]="status() === 'expired'"
-      [class.status-inactive]="status() === 'inactive'">
-      {{ statusLabel() }}
+      class="flex h-18 w-18 items-center justify-center rounded-full bg-surface text-[22px] font-bold tracking-[0.02em] text-ink"
+      aria-hidden="true">
+      {{ initials() }}
     </span>
 
-    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
-    <h1 class="name">{{ fullName() }}</h1>
-    <p class="dni">DNI: {{ dni() }}</p>
+    <h1 class="mt-3 mb-0 text-xl font-bold text-ink-strong">{{ fullName() }}</h1>
+    <p class="mt-1 mb-0 text-sm text-ink">DNI: {{ dni() }}</p>
 
     @if (expiration(); as expiration) {
-      @if (status() === 'expired'){
-        <p class="expiration">Venció el {{ expiration }}</p>
-      } @else {
-        <p class="expiration">Vence el {{ expiration }}</p>
-      }
+      <p class="mt-0.5 mb-0 text-[13px] text-muted">Vence el {{ expiration }}</p>
     } @else {
-      <p class="expiration">Sin membresía registrada</p>
+      <p class="mt-0.5 mb-0 text-[13px] text-muted">Sin membresía registrada</p>
     }
   </section>
 
@@ -32,5 +27,5 @@
       - ÚLTIMOS PAGOS: necesita un GET de pagos por socio.
   -->
 } @else {
-  <p class="message">Cargando…</p>
+  <p class="my-8 text-center text-sm text-muted">Cargando…</p>
 }

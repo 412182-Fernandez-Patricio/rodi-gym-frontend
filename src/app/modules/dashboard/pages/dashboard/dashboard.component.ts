@@ -6,6 +6,5 @@ import { FabButtonComponent } from '../../../../shared/components/fab-button/fab
   standalone: true,
   imports: [FabButtonComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {}

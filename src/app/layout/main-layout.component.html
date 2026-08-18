@@ -1,34 +1,43 @@
-<div class="app-shell">
-  <header class="app-header">
+<div class="relative flex h-full flex-col bg-bg">
+  <header class="flex shrink-0 items-center gap-2 bg-ink px-4 py-3.5 text-on-dark">
     @if (backLink(); as target) {
-      <a class="header-back" [routerLink]="target" aria-label="Volver">
+      <a
+        [routerLink]="target"
+        aria-label="Volver"
+        class="-ml-1.5 flex h-8 w-8 items-center justify-center rounded-lg text-on-dark no-underline [-webkit-tap-highlight-color:transparent]">
         <mat-icon>arrow_back</mat-icon>
       </a>
-      <span class="header-page">{{ pageTitle() }}</span>
+      <span class="text-[15px] font-medium text-white/90">{{ pageTitle() }}</span>
     } @else {
-      <div class="header-brand">
-        <span class="brand-icon" aria-hidden="true">
-          <mat-icon>fitness_center</mat-icon>
+      <div class="flex items-center gap-2">
+        <span
+          class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent"
+          aria-hidden="true">
+          <mat-icon class="h-[18px] w-[18px] text-[18px] text-on-dark">fitness_center</mat-icon>
         </span>
-        <span class="brand-text">RODI GYM</span>
+        <span class="text-[15px] font-bold tracking-[0.02em]">RODI GYM</span>
       </div>
-      <span class="header-divider">|</span>
-      <span class="header-page">{{ pageTitle() }}</span>
+      <span class="font-light text-white/35">|</span>
+      <span class="text-[15px] font-medium text-white/90">{{ pageTitle() }}</span>
     }
   </header>
 
-  <main class="app-content">
+  <main class="flex-1 overflow-y-auto p-4 pb-[88px]">
     <router-outlet />
   </main>
 
-  <nav class="bottom-nav" aria-label="Navegación principal">
+  <nav
+    class="fixed inset-x-0 bottom-0 z-[100] flex h-16 items-stretch justify-around border-t border-line bg-surface pb-[env(safe-area-inset-bottom,0)]"
+    aria-label="Navegación principal">
     @for (item of navItems; track item.path) {
       <a
-        class="bottom-nav-item"
         [routerLink]="item.path"
-        routerLinkActive="active"
-        [attr.aria-label]="item.label">
-        <mat-icon>{{ item.icon }}</mat-icon>
+        routerLinkActive="is-active font-bold text-ink-strong"
+        [attr.aria-label]="item.label"
+        class="group flex flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-muted no-underline transition-colors [-webkit-tap-highlight-color:transparent]">
+        <mat-icon class="group-[.is-active]:[font-variation-settings:'FILL'_1]">
+          {{ item.icon }}
+        </mat-icon>
         <span>{{ item.label }}</span>
       </a>
     }

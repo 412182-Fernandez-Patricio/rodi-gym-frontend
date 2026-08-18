@@ -26,7 +26,7 @@ describe('FabButtonComponent', () => {
     const emitted: unknown[] = [];
     fixture.componentInstance.action.subscribe(() => emitted.push(true));
 
-    const button = fixture.nativeElement.querySelector('button.fab') as HTMLButtonElement;
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
     expect(button).toBeTruthy();
     button.click();
 
@@ -37,7 +37,7 @@ describe('FabButtonComponent', () => {
     fixture.componentRef.setInput('link', '/payments');
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('a.fab')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('button.fab')).toBeNull();
+    expect(fixture.nativeElement.querySelector('a')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('button')).toBeNull();
   });
 });

@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [RouterLink, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './fab-button.component.html',
-  styleUrl: './fab-button.component.css',
 })
 export class FabButtonComponent {
   readonly icon = input.required<string>();

@@ -1,9 +1,16 @@
 @if (link(); as target) {
-  <a class="fab" [routerLink]="target" [attr.aria-label]="label()">
-    <mat-icon>{{ icon() }}</mat-icon>
+  <a
+    [routerLink]="target"
+    [attr.aria-label]="label()"
+    class="fixed right-4 bottom-[calc(64px_+_env(safe-area-inset-bottom,0px)_+_12px)] z-[101] flex h-14 w-14 items-center justify-center rounded-2xl bg-accent text-on-dark no-underline shadow-[0_4px_14px_rgba(34,197,94,0.45)] transition-transform duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-95">
+    <mat-icon class="h-8 w-8 text-[32px] font-bold">{{ icon() }}</mat-icon>
   </a>
 } @else {
-  <button type="button" class="fab" (click)="action.emit()" [attr.aria-label]="label()">
-    <mat-icon>{{ icon() }}</mat-icon>
+  <button
+    type="button"
+    (click)="action.emit()"
+    [attr.aria-label]="label()"
+    class="fixed right-4 bottom-[calc(64px_+_env(safe-area-inset-bottom,0px)_+_12px)] z-[101] flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl border-0 bg-accent p-0 text-on-dark shadow-[0_4px_14px_rgba(34,197,94,0.45)] transition-transform duration-150 ease-out [-webkit-tap-highlight-color:transparent] active:scale-95">
+    <mat-icon class="h-8 w-8 text-[32px] font-bold">{{ icon() }}</mat-icon>
   </button>
 }

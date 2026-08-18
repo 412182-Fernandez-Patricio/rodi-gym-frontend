@@ -30,7 +30,7 @@ const PAGE_TITLES: Record<string, string> = {
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule],
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css',
+  host: { class: 'block h-full' },
 })
 export class MainLayoutComponent {
   private readonly router = inject(Router);
