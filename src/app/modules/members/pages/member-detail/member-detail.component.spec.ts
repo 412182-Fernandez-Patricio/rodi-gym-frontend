@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { MemberDetailComponent } from './member-detail.component';
 import { PageHeaderService } from '../../../../shared/services/page-header.service';
+import { caseConversionInterceptor } from '../../../../shared/interceptors/case-conversion.interceptor';
 
 describe('MemberDetailComponent', () => {
   let fixture: ComponentFixture<MemberDetailComponent>;
@@ -46,7 +47,7 @@ describe('MemberDetailComponent', () => {
       imports: [MemberDetailComponent],
       providers: [
         provideRouter([]),
-        provideHttpClient(),
+        provideHttpClient(withInterceptors([caseConversionInterceptor])),
         provideHttpClientTesting(),
         {
           provide: ActivatedRoute,

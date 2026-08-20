@@ -1,46 +1,24 @@
 /**
- * Forma en la que la API expone un socio (snake_case, ver MemberResponseDto).
- * `expiration_dat  e` todavía no lo devuelve el backend: se agrega al DTO junto
- * con la membresía, que ya viaja EAGER desde MemberEntity.
+ * Socio tal como lo expone la API, ya con las claves en camelCase: la
+ * conversión la hace caseConversionInterceptor, no cada modelo.
  */
-export interface MemberDto {
-  id: number;
-  name: string;
-  last_name: string;
-  phone_number: string;
-  status: boolean;
-  expiration_date: string | null;
-}
-
-/** Socio ya normalizado para uso interno del frontend. */
 export interface Member {
   id: number;
   name: string;
   lastName: string;
   phoneNumber: string;
-  active: boolean;
+  status: boolean;
   expirationDate: string | null;
 }
 
 export type MemberStatus = 'active' | 'expired' | 'inactive';
-
-export function mapMemberFromDto(dto: MemberDto): Member {
-  return {
-    id: dto.id,
-    name: dto.name,
-    lastName: dto.last_name,
-    phoneNumber: dto.phone_number,
-    active: dto.status,
-    expirationDate: dto.expiration_date ?? null,
-  };
-}
 
 /**
  * Deriva el estado que se muestra en el badge. Replica el criterio de
  * CheckinServiceImpl: sin membresía o con la fecha pasada cuenta como vencido.
  */
 export function resolveMemberStatus(member: Member): MemberStatus {
-  if (!member.active) {
+  if (!member.status) {
     return 'inactive';
   }
 

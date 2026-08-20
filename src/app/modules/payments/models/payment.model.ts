@@ -1,14 +1,9 @@
 export type PaymentMethod = 'CASH' | 'TRANSFER' | 'DEBIT';
 
-/** Forma en la que la API expone un pago (ver PaymentResponseDto). */
-export interface PaymentDto {
-  id: number;
-  member_id: number;
-  amount: number;
-  payment_date: string;
-  payment_method: PaymentMethod;
-}
-
+/**
+ * Pago tal como lo expone la API (ver PaymentResponseDto), ya en camelCase
+ * por caseConversionInterceptor.
+ */
 export interface Payment {
   id: number;
   memberId: number;
@@ -22,16 +17,6 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   TRANSFER: 'Transferencia',
   DEBIT: 'Débito',
 };
-
-export function mapPaymentFromDto(dto: PaymentDto): Payment {
-  return {
-    id: dto.id,
-    memberId: dto.member_id,
-    amount: dto.amount,
-    paymentDate: dto.payment_date,
-    paymentMethod: dto.payment_method,
-  };
-}
 
 /**
  * Pasa "2026-08-01 10:05:00" a "01/08/2026".

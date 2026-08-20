@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { PageResponse, PageResponseDto, mapPageFromDto } from '../../../shared/models/page-response.model';
-import { Payment, PaymentDto, PaymentMethod, mapPaymentFromDto } from '../models/payment.model';
+import { PageResponse } from '../../../shared/models/page-response.model';
+import { Payment, PaymentMethod } from '../models/payment.model';
 
 /** Filtros del endpoint de búsqueda. Todos opcionales, igual que en el backend. */
 export interface PaymentSearch {
@@ -23,9 +23,7 @@ export class PaymentService {
   private readonly baseUrl = `${environment.apiUrl}/payments`;
 
   searchPayments(search: PaymentSearch = {}): Observable<PageResponse<Payment>> {
-    return this.http
-      .get<PageResponseDto<PaymentDto>>(this.baseUrl, { params: buildParams(search) })
-      .pipe(map((dto) => mapPageFromDto(dto, mapPaymentFromDto)));
+    return this.http.get<PageResponse<Payment>>(this.baseUrl, { params: buildParams(search) });
   }
 }
 
