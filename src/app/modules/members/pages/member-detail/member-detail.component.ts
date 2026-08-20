@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 import {
   Member,
   MemberStatus,
@@ -10,7 +10,12 @@ import {
   resolveMemberStatus,
 } from '../../models/member.model';
 import { MemberService } from '../../services/member.service';
+import { PaymentListComponent } from '../../../payments/components/payment-list/payment-list.component';
+import { Payment } from '../../../payments/models/payment.model';
+import { PaymentService } from '../../../payments/services/payment.service';
 import { PageHeaderService } from '../../../../shared/services/page-header.service';
+
+const PAYMENTS_SHOWN = 5;
 
 const STATUS_LABELS: Record<MemberStatus, string> = {
   active: 'Al día',
@@ -27,24 +32,39 @@ const STATUS_COLORS: Record<MemberStatus, string> = {
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [],
+  imports: [PaymentListComponent],
   templateUrl: './member-detail.component.html',
 })
 export class MemberDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly memberService = inject(MemberService);
+  private readonly paymentService = inject(PaymentService);
   private readonly pageHeader = inject(PageHeaderService);
 
+  private readonly memberId = Number(this.route.snapshot.paramMap.get('id'));
+
   readonly loadFailed = signal(false);
+  readonly paymentsFailed = signal(false);
 
   readonly member = toSignal(
-    this.memberService.getMember(Number(this.route.snapshot.paramMap.get('id'))).pipe(
+    this.memberService.getMember(this.memberId).pipe(
       catchError(() => {
         this.loadFailed.set(true);
         return of<Member | null>(null);
       }),
     ),
     { initialValue: null as Member | null },
+  );
+
+  readonly payments = toSignal(
+    this.paymentService.searchPayments({ memberId: this.memberId, size: PAYMENTS_SHOWN }).pipe(
+      map((page) => page.content),
+      catchError(() => {
+        this.paymentsFailed.set(true);
+        return of<Payment[]>([]);
+      }),
+    ),
+    { initialValue: [] as Payment[] },
   );
 
   readonly status = computed<MemberStatus | null>(() => {

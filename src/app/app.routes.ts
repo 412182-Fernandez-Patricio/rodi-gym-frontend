@@ -24,7 +24,7 @@ export const routes: Routes = [
       },
       {
         path: 'payments',
-        loadComponent: () => import('./modules/payments/pages/payment-list/payment-list.component').then(m => m.PaymentListComponent),
+        loadComponent: () => import('./modules/payments/pages/payments/payments.component').then(m => m.PaymentsComponent),
       },
       {
         path: '',

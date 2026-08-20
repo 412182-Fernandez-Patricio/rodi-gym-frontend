@@ -9,6 +9,38 @@ describe('MemberDetailComponent', () => {
   let fixture: ComponentFixture<MemberDetailComponent>;
   let httpMock: HttpTestingController;
 
+  const memberBody = {
+    id: 30111222,
+    name: 'Ana',
+    last_name: 'Garcia',
+    phone_number: '3512345678',
+    status: true,
+    expiration_date: '2099-09-01',
+  };
+
+  const paymentsBody = {
+    content: [
+      {
+        id: 1,
+        member_id: 30111222,
+        amount: 7000,
+        payment_date: '2026-08-01 10:05:00',
+        payment_method: 'TRANSFER',
+      },
+    ],
+    page: 0,
+    size: 5,
+    total_elements: 1,
+    total_pages: 1,
+    last: true,
+  };
+
+  const memberRequest = () => httpMock.expectOne((req) => req.url === '/api/members/30111222');
+  const paymentsRequest = () => httpMock.expectOne((req) => req.url === '/api/payments');
+
+  const flushMember = () => memberRequest().flush(memberBody);
+  const flushPayments = () => paymentsRequest().flush(paymentsBody);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MemberDetailComponent],
@@ -31,15 +63,8 @@ describe('MemberDetailComponent', () => {
 
   it('should render the member and publish the header title', () => {
     fixture.detectChanges();
-
-    httpMock.expectOne('/api/members/30111222').flush({
-      id: 30111222,
-      name: 'Ana',
-      last_name: 'Garcia',
-      phone_number: '3512345678',
-      status: true,
-      expiration_date: '2099-09-01',
-    });
+    flushMember();
+    flushPayments();
     fixture.detectChanges();
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -50,12 +75,39 @@ describe('MemberDetailComponent', () => {
     expect(TestBed.inject(PageHeaderService).backLink()).toBe('/members');
   });
 
-  it('should show a message when the request fails', () => {
+  it('should ask only for this member latest payments and render them', () => {
+    fixture.detectChanges();
+    flushMember();
+
+    const request = paymentsRequest();
+    expect(request.request.params.get('member_id')).toBe('30111222');
+    expect(request.request.params.get('size')).toBe('5');
+    request.flush(paymentsBody);
     fixture.detectChanges();
 
-    httpMock
-      .expectOne('/api/members/30111222')
-      .flush('boom', { status: 500, statusText: 'Server Error' });
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text).toContain('Últimos pagos');
+    expect(text).toContain('01/08/2026');
+    expect(text).toContain('Transferencia');
+    expect(text).toContain('$7.000');
+  });
+
+  it('should keep the profile usable when payments fail', () => {
+    fixture.detectChanges();
+    flushMember();
+
+    paymentsRequest().flush('boom', { status: 500, statusText: 'Server Error' });
+    fixture.detectChanges();
+
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text).toContain('Ana Garcia');
+    expect(text).toContain('No se pudieron cargar los pagos');
+  });
+
+  it('should show a message when the member request fails', () => {
+    fixture.detectChanges();
+    memberRequest().flush('boom', { status: 500, statusText: 'Server Error' });
+    flushPayments();
     fixture.detectChanges();
 
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(

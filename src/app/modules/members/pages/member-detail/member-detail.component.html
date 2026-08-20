@@ -21,11 +21,21 @@
   </section>
 
   <!--
-    Espacio reservado para las dos secciones del mock, que todavía no tienen
-    endpoint en el backend:
-      - ASISTENCIA (mes): necesita los check-ins de un socio por rango de fechas.
-      - ÚLTIMOS PAGOS: necesita un GET de pagos por socio.
+    Espacio reservado para la asistencia del mock: necesita un endpoint de
+    check-ins de un socio por rango de fechas, que todavía no existe.
   -->
+
+  <section class="mt-6">
+    <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+      Últimos pagos
+    </h2>
+
+    @if (paymentsFailed()) {
+      <p class="my-4 text-center text-sm text-muted">No se pudieron cargar los pagos.</p>
+    } @else {
+      <app-payment-list [payments]="payments()" />
+    }
+  </section>
 } @else {
   <p class="my-8 text-center text-sm text-muted">Cargando…</p>
 }
