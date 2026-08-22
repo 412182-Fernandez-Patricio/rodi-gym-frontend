@@ -1,0 +1,13 @@
+@if (loadFailed()) {
+  <p class="message">No se pudieron cargar los socios.</p>
+} @else if (members().length) {
+  <ul class="member-list">
+    @for (member of members(); track member.id) {
+      <li>
+        <app-member-card [member]="member" />
+      </li>
+    }
+  </ul>
+} @else {
+  <p class="message">Todavía no hay socios para mostrar.</p>
+}

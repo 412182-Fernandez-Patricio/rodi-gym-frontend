@@ -1,0 +1,24 @@
+<article class="member-card" [class.inactive]="status() === 'inactive'">
+  <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+
+  <div class="details">
+    <p class="name">{{ fullName() }}</p>
+    <span
+      class="badge"
+      [class.badge-active]="status() === 'active'"
+      [class.badge-expired]="status() === 'expired'"
+      [class.badge-inactive]="status() === 'inactive'">
+      {{ statusLabel() }}
+    </span>
+  </div>
+
+  @if (status() !== 'inactive') {
+    <button
+      type="button"
+      class="contact"
+      (click)="contact.emit(member())"
+      [attr.aria-label]="'Contactar a ' + fullName()">
+      <mat-icon>chat_bubble_outline</mat-icon>
+    </button>
+  }
+</article>

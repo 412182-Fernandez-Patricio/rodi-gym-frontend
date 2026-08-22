@@ -1,1 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+
+:root {
+  /* Paleta base */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-on-dark: #ffffff;
+  --color-ink: #1a2332;
+  --color-ink-strong: #0f172a;
+  --color-muted: #94a3b8;
+  --color-border: #e2e8f0;
+
+  /* Estados */
+  --color-accent: #22c55e;
+  --color-accent-soft: #dcfce7;
+  --color-accent-strong: #15803d;
+  --color-danger: #ef4444;
+  --color-danger-soft: #fee2e2;
+  --color-danger-strong: #b91c1c;
+  --color-neutral-soft: #f1f5f9;
+
+  /* Material toma los colores de la paleta de arriba */
+  --mat-sys-primary: var(--color-accent);
+  --mat-sys-on-primary: var(--color-on-dark);
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-background: var(--color-bg);
+  --mat-sys-on-surface: var(--color-ink);
+  --mat-sys-error: var(--color-danger);
+  --mat-sys-outline: var(--color-border);
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+app-root,
+app-main-layout {
+  display: block;
+  height: 100%;
+}
