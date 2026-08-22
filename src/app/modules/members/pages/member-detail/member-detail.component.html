@@ -20,10 +20,20 @@
     }
   </section>
 
-  <!--
-    Espacio reservado para la asistencia del mock: necesita un endpoint de
-    check-ins de un socio por rango de fechas, que todavía no existe.
-  -->
+  <section class="mt-6">
+    <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+      Asistencia
+    </h2>
+
+    @if (attendanceFailed()) {
+      <p class="my-4 text-center text-sm text-muted">No se pudo cargar la asistencia.</p>
+    } @else {
+      <app-attendance-calendar
+        [month]="month()"
+        [days]="attendance()"
+        (monthChange)="month.set($event)" />
+    }
+  </section>
 
   <section class="mt-6">
     <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">

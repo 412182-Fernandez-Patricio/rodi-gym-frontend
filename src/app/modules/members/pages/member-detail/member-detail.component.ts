@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, of } from 'rxjs';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of, switchMap } from 'rxjs';
 import {
   Member,
   MemberStatus,
@@ -10,6 +10,9 @@ import {
   resolveMemberStatus,
 } from '../../models/member.model';
 import { MemberService } from '../../services/member.service';
+import { AttendanceCalendarComponent } from '../../../check-in/components/attendance-calendar/attendance-calendar.component';
+import { AttendanceDay, currentIsoMonth } from '../../../check-in/models/attendance.model';
+import { AttendanceService } from '../../../check-in/services/attendance.service';
 import { PaymentListComponent } from '../../../payments/components/payment-list/payment-list.component';
 import { Payment } from '../../../payments/models/payment.model';
 import { PaymentService } from '../../../payments/services/payment.service';
@@ -32,19 +35,23 @@ const STATUS_COLORS: Record<MemberStatus, string> = {
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [PaymentListComponent],
+  imports: [PaymentListComponent, AttendanceCalendarComponent],
   templateUrl: './member-detail.component.html',
 })
 export class MemberDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly memberService = inject(MemberService);
   private readonly paymentService = inject(PaymentService);
+  private readonly attendanceService = inject(AttendanceService);
   private readonly pageHeader = inject(PageHeaderService);
 
   private readonly memberId = Number(this.route.snapshot.paramMap.get('id'));
 
   readonly loadFailed = signal(false);
   readonly paymentsFailed = signal(false);
+  readonly attendanceFailed = signal(false);
+
+  readonly month = signal(currentIsoMonth());
 
   readonly member = toSignal(
     this.memberService.getMember(this.memberId).pipe(
@@ -65,6 +72,26 @@ export class MemberDetailComponent {
       }),
     ),
     { initialValue: [] as Payment[] },
+  );
+
+  /**
+   * Se vuelve a pedir cada vez que cambia el mes. El catchError va adentro del
+   * switchMap a propósito: afuera, un mes que falla completa el stream y los
+   * cambios de mes siguientes dejan de pedir nada.
+   */
+  readonly attendance = toSignal(
+    toObservable(this.month).pipe(
+      switchMap((month) => {
+        this.attendanceFailed.set(false);
+        return this.attendanceService.getAttendance(this.memberId, month).pipe(
+          catchError(() => {
+            this.attendanceFailed.set(true);
+            return of<AttendanceDay[]>([]);
+          }),
+        );
+      }),
+    ),
+    { initialValue: [] as AttendanceDay[] },
   );
 
   readonly status = computed<MemberStatus | null>(() => {

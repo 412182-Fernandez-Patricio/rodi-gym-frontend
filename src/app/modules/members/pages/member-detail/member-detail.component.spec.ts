@@ -4,6 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { MemberDetailComponent } from './member-detail.component';
 import { PageHeaderService } from '../../../../shared/services/page-header.service';
+import { currentIsoMonth, shiftMonth } from '../../../check-in/models/attendance.model';
 import { caseConversionInterceptor } from '../../../../shared/interceptors/case-conversion.interceptor';
 
 describe('MemberDetailComponent', () => {
@@ -36,11 +37,16 @@ describe('MemberDetailComponent', () => {
     last: true,
   };
 
+  const attendanceBody = [{ date: '2026-08-03', success: true, checkins: 1 }];
+
   const memberRequest = () => httpMock.expectOne((req) => req.url === '/api/members/30111222');
   const paymentsRequest = () => httpMock.expectOne((req) => req.url === '/api/payments');
+  const attendanceRequest = () =>
+    httpMock.expectOne((req) => req.url === '/api/members/30111222/attendance');
 
   const flushMember = () => memberRequest().flush(memberBody);
   const flushPayments = () => paymentsRequest().flush(paymentsBody);
+  const flushAttendance = () => attendanceRequest().flush(attendanceBody);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -66,6 +72,7 @@ describe('MemberDetailComponent', () => {
     fixture.detectChanges();
     flushMember();
     flushPayments();
+    flushAttendance();
     fixture.detectChanges();
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -84,6 +91,7 @@ describe('MemberDetailComponent', () => {
     expect(request.request.params.get('member_id')).toBe('30111222');
     expect(request.request.params.get('size')).toBe('5');
     request.flush(paymentsBody);
+    flushAttendance();
     fixture.detectChanges();
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -98,6 +106,7 @@ describe('MemberDetailComponent', () => {
     flushMember();
 
     paymentsRequest().flush('boom', { status: 500, statusText: 'Server Error' });
+    flushAttendance();
     fixture.detectChanges();
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -109,10 +118,81 @@ describe('MemberDetailComponent', () => {
     fixture.detectChanges();
     memberRequest().flush('boom', { status: 500, statusText: 'Server Error' });
     flushPayments();
+    flushAttendance();
     fixture.detectChanges();
 
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
       'No se pudo cargar el socio',
+    );
+  });
+
+  it('should ask for this month attendance and paint it', () => {
+    fixture.detectChanges();
+    flushMember();
+    flushPayments();
+
+    const request = attendanceRequest();
+    expect(request.request.params.get('month')).toBe(currentIsoMonth());
+    request.flush(attendanceBody);
+    fixture.detectChanges();
+
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text).toContain('Asistencia');
+    expect((fixture.nativeElement as HTMLElement).querySelector('app-attendance-calendar'))
+      .toBeTruthy();
+  });
+
+  it('should keep the profile usable when attendance fails', () => {
+    fixture.detectChanges();
+    flushMember();
+    flushPayments();
+    attendanceRequest().flush('boom', { status: 500, statusText: 'Server Error' });
+    fixture.detectChanges();
+
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text).toContain('Ana Garcia');
+    expect(text).toContain('01/08/2026');
+    expect(text).toContain('No se pudo cargar la asistencia');
+  });
+
+  it('should ask again when the calendar changes month', () => {
+    fixture.detectChanges();
+    flushMember();
+    flushPayments();
+    flushAttendance();
+    fixture.detectChanges();
+
+    const previous = shiftMonth(currentIsoMonth(), -1);
+    fixture.componentInstance.month.set(previous);
+    fixture.detectChanges();
+
+    const request = attendanceRequest();
+    expect(request.request.params.get('month')).toBe(previous);
+    request.flush([{ date: `${previous}-05`, success: false, checkins: 1 }]);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Ana Garcia');
+  });
+
+  it('should recover on the next month after one fails', () => {
+    fixture.detectChanges();
+    flushMember();
+    flushPayments();
+    attendanceRequest().flush('boom', { status: 500, statusText: 'Server Error' });
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      'No se pudo cargar la asistencia',
+    );
+
+    fixture.componentInstance.month.set(shiftMonth(currentIsoMonth(), -1));
+    fixture.detectChanges();
+
+    attendanceRequest().flush(attendanceBody);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain(
+      'No se pudo cargar la asistencia',
     );
   });
 });
