@@ -1,0 +1,51 @@
+@if (loadFailed()) {
+  <p class="my-8 text-center text-sm text-muted">No se pudo cargar el socio.</p>
+} @else if (member(); as member) {
+  <section [class]="profileClass()">
+    <span [class]="statusClass()">{{ statusLabel() }}</span>
+
+    <span
+      class="flex h-18 w-18 items-center justify-center rounded-full bg-surface text-[22px] font-bold tracking-[0.02em] text-ink"
+      aria-hidden="true">
+      {{ initials() }}
+    </span>
+
+    <h1 class="mt-3 mb-0 text-xl font-bold text-ink-strong">{{ fullName() }}</h1>
+    <p class="mt-1 mb-0 text-sm text-ink">DNI: {{ dni() }}</p>
+
+    @if (expiration(); as expiration) {
+      <p class="mt-0.5 mb-0 text-[13px] text-muted">Vence el {{ expiration }}</p>
+    } @else {
+      <p class="mt-0.5 mb-0 text-[13px] text-muted">Sin membresía registrada</p>
+    }
+  </section>
+
+  <section class="mt-6">
+    <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+      Asistencia
+    </h2>
+
+    @if (attendanceFailed()) {
+      <p class="my-4 text-center text-sm text-muted">No se pudo cargar la asistencia.</p>
+    } @else {
+      <app-attendance-calendar
+        [month]="month()"
+        [days]="attendance()"
+        (monthChange)="month.set($event)" />
+    }
+  </section>
+
+  <section class="mt-6">
+    <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+      Últimos pagos
+    </h2>
+
+    @if (paymentsFailed()) {
+      <p class="my-4 text-center text-sm text-muted">No se pudieron cargar los pagos.</p>
+    } @else {
+      <app-payment-list [payments]="payments()" />
+    }
+  </section>
+} @else {
+  <p class="my-8 text-center text-sm text-muted">Cargando…</p>
+}

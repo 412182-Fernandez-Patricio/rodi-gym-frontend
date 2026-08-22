@@ -19,8 +19,12 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/members/pages/member-list/member-list.component').then(m => m.MemberListComponent),
       },
       {
+        path: 'members/:id',
+        loadComponent: () => import('./modules/members/pages/member-detail/member-detail.component').then(m => m.MemberDetailComponent),
+      },
+      {
         path: 'payments',
-        loadComponent: () => import('./modules/payments/pages/payment-list/payment-list.component').then(m => m.PaymentListComponent),
+        loadComponent: () => import('./modules/payments/pages/payments/payments.component').then(m => m.PaymentsComponent),
       },
       {
         path: '',

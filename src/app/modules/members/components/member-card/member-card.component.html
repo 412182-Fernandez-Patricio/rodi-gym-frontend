@@ -1,24 +1,22 @@
-<article class="member-card" [class.inactive]="status() === 'inactive'">
-  <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+<article [class]="cardClass()">
+  <a
+    [routerLink]="['/members', member().id]"
+    class="flex min-w-0 flex-1 items-center gap-3 text-inherit no-underline [-webkit-tap-highlight-color:transparent]">
+    <span [class]="avatarClass()" aria-hidden="true">{{ initials() }}</span>
 
-  <div class="details">
-    <p class="name">{{ fullName() }}</p>
-    <span
-      class="badge"
-      [class.badge-active]="status() === 'active'"
-      [class.badge-expired]="status() === 'expired'"
-      [class.badge-inactive]="status() === 'inactive'">
-      {{ statusLabel() }}
+    <span class="flex min-w-0 flex-1 flex-col items-start gap-1">
+      <span [class]="nameClass()">{{ fullName() }}</span>
+      <span [class]="badgeClass()">{{ statusLabel() }}</span>
     </span>
-  </div>
+  </a>
 
   @if (status() !== 'inactive') {
     <button
       type="button"
-      class="contact"
       (click)="contact.emit(member())"
-      [attr.aria-label]="'Contactar a ' + fullName()">
-      <mat-icon>chat_bubble_outline</mat-icon>
+      [attr.aria-label]="'Contactar a ' + fullName()"
+      class="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border-[1.5px] border-accent bg-transparent p-0 text-accent transition-colors duration-150 [-webkit-tap-highlight-color:transparent] active:bg-accent-soft">
+      <app-icon name="chat_bubble_outline" class="h-[18px] w-[18px] text-[18px]" />
     </button>
   }
 </article>

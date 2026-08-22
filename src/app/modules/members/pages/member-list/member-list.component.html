@@ -1,7 +1,12 @@
 @if (loadFailed()) {
-  <p class="message">No se pudieron cargar los socios.</p>
+  <p class="my-8 text-center text-sm text-muted">No se pudieron cargar los socios.</p>
 } @else if (members().length) {
-  <ul class="member-list">
+  <!--
+    pb-14 deja subir la última tarjeta por encima del botón flotante, que ocupa
+    56px arrancando a 76px del borde inferior, mientras el contenido solo
+    reserva 88px para la barra de navegación.
+  -->
+  <ul class="m-0 flex list-none flex-col gap-2.5 p-0 pb-14">
     @for (member of members(); track member.id) {
       <li>
         <app-member-card [member]="member" />
@@ -9,5 +14,7 @@
     }
   </ul>
 } @else {
-  <p class="message">Todavía no hay socios para mostrar.</p>
+  <p class="my-8 text-center text-sm text-muted">Todavía no hay socios para mostrar.</p>
 }
+
+<app-fab-button icon="person_add" label="Agregar socio" />

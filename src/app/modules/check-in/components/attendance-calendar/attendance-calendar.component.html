@@ -1,0 +1,36 @@
+<div class="rounded-[14px] border border-line bg-surface px-3 py-3.5">
+  <div class="mb-3 flex items-center justify-between gap-2">
+    <button
+      type="button"
+      (click)="goToPreviousMonth()"
+      aria-label="Mes anterior"
+      class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink [-webkit-tap-highlight-color:transparent] active:bg-neutral-soft">
+      <app-icon name="chevron_left" class="h-5 w-5 text-[20px]" />
+    </button>
+
+    <span class="text-[13px] font-semibold text-ink-strong">{{ monthLabel() }}</span>
+
+    <button
+      type="button"
+      (click)="goToNextMonth()"
+      [disabled]="!canGoNext()"
+      aria-label="Mes siguiente"
+      class="flex h-8 w-8 items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink [-webkit-tap-highlight-color:transparent] not-disabled:cursor-pointer disabled:text-line active:not-disabled:bg-neutral-soft">
+      <app-icon name="chevron_right" class="h-5 w-5 text-[20px]" />
+    </button>
+  </div>
+
+  <div class="grid grid-cols-7 gap-y-2">
+    @for (weekday of weekdays; track $index) {
+      <span class="justify-self-center text-[11px] font-semibold text-muted">{{ weekday }}</span>
+    }
+
+    @for (cell of cells(); track cell.key) {
+      @if (cell.day === null) {
+        <span></span>
+      } @else {
+        <span [class]="cellClass(cell.state)">{{ cell.label }}</span>
+      }
+    }
+  </div>
+</div>

@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { FabButtonComponent } from '../../../../shared/components/fab-button/fab-button.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  template: `
-    <h1>Dashboard</h1>
-    <p>Bienvenido a RODI GYM. Aquí verás el resumen general.</p>
-  `
+  imports: [FabButtonComponent],
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {}

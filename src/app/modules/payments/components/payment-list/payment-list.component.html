@@ -1,0 +1,17 @@
+@if (rows().length) {
+  <ul class="m-0 flex list-none flex-col gap-2.5 p-0">
+    @for (row of rows(); track row.id) {
+      <li
+        class="flex items-center justify-between gap-3 rounded-[14px] border border-line bg-surface px-4 py-3.5">
+        <span class="flex min-w-0 flex-col gap-1">
+          <span class="truncate text-[15px] font-semibold text-ink-strong">{{ row.date }}</span>
+          <span class="truncate text-[13px] text-muted">{{ row.method }}</span>
+        </span>
+
+        <span class="shrink-0 text-[15px] font-bold text-ink-strong">{{ row.amount }}</span>
+      </li>
+    }
+  </ul>
+} @else {
+  <p class="my-4 text-center text-sm text-muted">{{ emptyMessage() }}</p>
+}
