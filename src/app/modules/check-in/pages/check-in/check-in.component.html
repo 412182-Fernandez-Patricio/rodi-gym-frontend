@@ -1,0 +1,36 @@
+<section class="flex flex-col items-center gap-1 py-4">
+  <div
+    class="flex h-40 w-40 flex-col items-center justify-center rounded-full border-8 border-ink text-ink-strong">
+    <span class="text-5xl font-bold">{{ granted() }}</span>
+    <span class="mt-1 text-[10px] font-bold tracking-[0.08em] text-muted uppercase">Ingresos</span>
+    <span class="text-[10px] text-muted">de hoy</span>
+  </div>
+
+  @if (refusedCount()) {
+    <p class="mt-2 mb-0 text-[13px] font-semibold text-danger-strong">
+      {{ refusedCount() }} rechazado{{ refusedCount() === 1 ? '' : 's' }}
+    </p>
+  }
+</section>
+
+<div class="mt-2 mb-2 flex items-center justify-between gap-2">
+  <h2 class="m-0 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+    Registro de ingresos
+  </h2>
+
+  <button
+    type="button"
+    (click)="refresh()"
+    [disabled]="loading()"
+    aria-label="Actualizar"
+    class="flex items-center gap-1 rounded-full border-0 bg-transparent px-2 py-1 text-[11px] text-muted not-disabled:cursor-pointer [-webkit-tap-highlight-color:transparent] active:not-disabled:bg-neutral-soft">
+    @if (loadFailed()) {
+      <span class="font-semibold text-danger-strong">Sin conexión</span>
+    } @else if (lastUpdated(); as updated) {
+      <span>Actualizado {{ updated }}</span>
+    }
+    <app-icon name="refresh" class="h-4 w-4 text-[16px]" />
+  </button>
+</div>
+
+<app-checkin-list [checkins]="checkins()" [memberNames]="memberNames()" />
