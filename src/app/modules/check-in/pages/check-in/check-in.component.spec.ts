@@ -34,16 +34,24 @@ describe('CheckInComponent', () => {
     last: true,
   };
 
-  const membersBody = [
-    {
-      id: 30111222,
-      name: 'Ana',
-      last_name: 'Garcia',
-      phone_number: '351',
-      status: true,
-      expiration_date: '2099-01-01',
-    },
-  ];
+  // El padron ahora viene paginado, igual que pagos y check-ins.
+  const membersBody = {
+    content: [
+      {
+        id: 30111222,
+        name: 'Ana',
+        last_name: 'Garcia',
+        phone_number: '351',
+        status: true,
+        expiration_date: '2099-01-01',
+      },
+    ],
+    page: 0,
+    size: 500,
+    total_elements: 1,
+    total_pages: 1,
+    last: true,
+  };
 
   const grantedBody = { ...checkinsBody, content: [], total_elements: 11 };
 

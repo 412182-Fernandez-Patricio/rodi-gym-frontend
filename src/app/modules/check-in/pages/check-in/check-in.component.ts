@@ -18,6 +18,7 @@ import { CheckinListComponent } from '../../components/checkin-list/checkin-list
 import { Checkin, todayRange } from '../../models/checkin.model';
 import { CheckinService } from '../../services/checkin.service';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { Member } from '../../../members/models/member.model';
 import { MemberService } from '../../../members/services/member.service';
 
 /** Cada cuánto se vuelve a pedir, mientras la pantalla esté a la vista. */
@@ -25,6 +26,14 @@ const POLL_INTERVAL_MS = 30_000;
 
 /** Tope de filas del registro. El contador sale del total, no de esta lista. */
 const ROWS_SHOWN = 50;
+
+/**
+ * Cuántos socios se traen para resolver los nombres del registro. El endpoint
+ * pagina, así que hay que pedir de más: un check-in solo trae el id del socio.
+ * Si el padrón crece por encima de esto, lo correcto es que el backend mande el
+ * nombre en el propio check-in.
+ */
+const MEMBER_LOOKUP_SIZE = 500;
 
 @Component({
   selector: 'app-check-in',
@@ -123,9 +132,10 @@ export class CheckInComponent {
 
   private loadMemberNames(): void {
     this.memberService
-      .getMembers()
+      .searchMembers({ size: MEMBER_LOOKUP_SIZE })
       .pipe(
-        catchError(() => of([])),
+        map((page) => page.content),
+        catchError(() => of([] as Member[])),
         takeUntilDestroyed(),
       )
       .subscribe((members) => {
