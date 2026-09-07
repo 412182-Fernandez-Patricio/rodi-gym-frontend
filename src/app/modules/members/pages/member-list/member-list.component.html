@@ -1,20 +1,58 @@
-@if (loadFailed()) {
+<label class="relative mb-3 block">
+  <span class="sr-only">Buscar socio</span>
+  <app-icon
+    name="search"
+    class="pointer-events-none absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-[20px] text-muted" />
+  <input
+    type="search"
+    placeholder="Buscar socio..."
+    [value]="searchTerm()"
+    (input)="onSearch($any($event.target).value)"
+    class="w-full rounded-full border border-line bg-surface py-2.5 pr-4 pl-10 text-[14px] text-ink-strong outline-none placeholder:text-muted focus:border-accent" />
+</label>
+
+<div class="mb-3 flex gap-2 overflow-x-auto pb-1">
+  @for (filter of filters; track filter.label) {
+    <button
+      type="button"
+      (click)="selectStatus(filter.status)"
+      [attr.aria-pressed]="status() === filter.status"
+      [class]="chipClass(filter.status)">
+      {{ filter.label }}
+    </button>
+  }
+</div>
+
+@if (loadFailed() && !members().length) {
   <p class="my-8 text-center text-sm text-muted">No se pudieron cargar los socios.</p>
 } @else if (members().length) {
-  <!--
-    pb-14 deja subir la última tarjeta por encima del botón flotante, que ocupa
-    56px arrancando a 76px del borde inferior, mientras el contenido solo
-    reserva 88px para la barra de navegación.
-  -->
-  <ul class="m-0 flex list-none flex-col gap-2.5 p-0 pb-14">
+  <ul class="flex list-none flex-col gap-2.5 p-0 pb-14">
     @for (member of members(); track member.id) {
       <li>
         <app-member-card [member]="member" />
       </li>
     }
+
+    @if (!isLastPage()) {
+      <li class="mt-1 text-center">
+        <button
+          type="button"
+          (click)="loadMore()"
+          [disabled]="loading()"
+          class="rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-semibold text-ink not-disabled:cursor-pointer [-webkit-tap-highlight-color:transparent]">
+          {{ loading() ? 'Cargando…' : 'Cargar más' }}
+        </button>
+      </li>
+    } @else if (total()) {
+      <li class="mt-1 text-center text-[11px] text-muted">
+        {{ total() }} socio{{ total() === 1 ? '' : 's' }}
+      </li>
+    }
   </ul>
+} @else if (loading()) {
+  <p class="my-8 text-center text-sm text-muted">Cargando…</p>
 } @else {
-  <p class="my-8 text-center text-sm text-muted">Todavía no hay socios para mostrar.</p>
+  <p class="my-8 text-center text-sm text-muted">No hay socios que coincidan.</p>
 }
 
 <app-fab-button icon="person_add" label="Agregar socio" />
