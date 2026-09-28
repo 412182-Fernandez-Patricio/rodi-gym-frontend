@@ -1,6 +1,6 @@
 # 001 · Alta de socio
 
-**Estado:** Aprobada · **Repo:** frontend · **Rama:** `feature/create-member`
+**Estado:** Implementada · **Repo:** frontend · **Rama:** `feature/create-member`
 
 Se apoya en el contrato de `rodi-gym-backend/docs/specs/001-alta-de-socio.md`.
 
@@ -146,11 +146,11 @@ resto.
 - [x] Link del FAB en Socios.
 - [x] Specs de la página.
 - [x] `npx ng build` y `npx ng test --watch=false --browsers=ChromeHeadless` en verde.
-- [ ] Probarlo contra el backend con la rama `feature/create-member` (lo levanta el
+- [x] Probarlo contra el backend con la rama `feature/create-member` (lo levanta el
   usuario).
 - [x] Actualizar `CLAUDE.md` (pantallas, convenciones de formularios, trampa de la
   ruta).
-- [ ] Pasar esta spec a **Implementada** al mergear.
+- [x] Pasar esta spec a **Implementada** al mergear.
 
 ## Pendientes
 
