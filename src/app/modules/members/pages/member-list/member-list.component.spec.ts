@@ -152,4 +152,16 @@ describe('MemberListComponent', () => {
     expect(retry.request.params.get('page')).toBe('1');
     retry.flush(pageOf([member(2, 'Beto', 'Lopez')]));
   }));
+
+  it('should link the add button to the new member form', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(300);
+    membersRequest().flush(pageOf([]));
+    fixture.detectChanges();
+
+    const add = (fixture.nativeElement as HTMLElement).querySelector(
+      'a[aria-label="Agregar socio"]',
+    ) as HTMLAnchorElement;
+    expect(add.getAttribute('href')).toBe('/members/new');
+  }));
 });
