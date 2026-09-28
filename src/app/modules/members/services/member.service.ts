@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PageResponse } from '../../../shared/models/page-response.model';
-import { Member, MemberStatus } from '../models/member.model';
+import { Member, MemberCreate, MemberStatus } from '../models/member.model';
 
 /** Filtros del endpoint de búsqueda. Todos opcionales, igual que en el backend. */
 export interface MemberSearch {
@@ -25,6 +25,11 @@ export class MemberService {
 
   getMember(id: number): Observable<Member> {
     return this.http.get<Member>(`${this.baseUrl}/${id}`);
+  }
+
+  /** Responde 201 con el socio, sin membresía; 409 si el DNI ya existe. */
+  createMember(member: MemberCreate): Observable<Member> {
+    return this.http.post<Member>(this.baseUrl, member);
   }
 }
 

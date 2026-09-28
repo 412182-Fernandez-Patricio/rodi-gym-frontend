@@ -1,0 +1,50 @@
+<form [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-4">
+  @for (field of fields; track field.key) {
+    <div>
+      <label
+        [for]="field.key"
+        class="mb-1.5 block text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+        {{ field.label }}
+      </label>
+      <input
+        [id]="field.key"
+        [formControlName]="field.key"
+        [type]="field.type"
+        [attr.inputmode]="field.inputMode"
+        [attr.autocapitalize]="field.autocapitalize"
+        [placeholder]="field.placeholder"
+        autocomplete="off"
+        [attr.aria-invalid]="!!errorMessage(field)"
+        [attr.aria-describedby]="errorMessage(field) ? field.key + '-error' : null"
+        [class]="inputClass(field)" />
+
+      @if (errorMessage(field); as message) {
+        <p [id]="field.key + '-error'" class="mt-1 mb-0 text-[12px] text-danger-strong">
+          {{ message }}
+          @if (isDuplicate(field) && duplicateDni(); as dni) {
+            <a
+              [routerLink]="['/members', dni]"
+              class="font-semibold text-danger-strong underline">
+              Ver socio
+            </a>
+          }
+        </p>
+      }
+    </div>
+  }
+
+  @if (saveFailed()) {
+    <p
+      role="alert"
+      class="m-0 rounded-xl bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger-strong">
+      No se pudo guardar el socio. Probá de nuevo.
+    </p>
+  }
+
+  <button
+    type="submit"
+    [disabled]="saving()"
+    class="mt-2 w-full rounded-xl border-0 bg-accent py-3 text-[15px] font-bold text-on-dark not-disabled:cursor-pointer disabled:opacity-60 [-webkit-tap-highlight-color:transparent] active:not-disabled:bg-accent-strong">
+    {{ saving() ? 'Guardando…' : 'Guardar' }}
+  </button>
+</form>

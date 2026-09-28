@@ -19,6 +19,12 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/members/pages/member-list/member-list.component').then(m => m.MemberListComponent),
       },
       {
+        // Antes que 'members/:id': el router toma la primera que coincide y, al
+        // revés, "new" se abriría como el perfil de un socio.
+        path: 'members/new',
+        loadComponent: () => import('./modules/members/pages/member-create/member-create.component').then(m => m.MemberCreateComponent),
+      },
+      {
         path: 'members/:id',
         loadComponent: () => import('./modules/members/pages/member-detail/member-detail.component').then(m => m.MemberDetailComponent),
       },

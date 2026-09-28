@@ -11,6 +11,14 @@ export interface Member {
   expirationDate: string | null;
 }
 
+/** Cuerpo del alta. `id` es el DNI: es la clave del socio y la usa el check-in. */
+export interface MemberCreate {
+  id: number;
+  name: string;
+  lastName: string;
+  phoneNumber: string;
+}
+
 export type MemberStatus = 'active' | 'expired' | 'inactive';
 
 /**
