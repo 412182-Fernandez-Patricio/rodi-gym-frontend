@@ -146,7 +146,7 @@ resto.
 - [x] Link del FAB en Socios.
 - [x] Specs de la página.
 - [x] `npx ng build` y `npx ng test --watch=false --browsers=ChromeHeadless` en verde.
-- [ ] Probarlo contra el backend con la rama `feature/create-member` (lo levanta el
+- [x] Probarlo contra el backend con la rama `feature/create-member` (lo levanta el
   usuario).
 - [x] Actualizar `CLAUDE.md` (pantallas, convenciones de formularios, trampa de la
   ruta).
