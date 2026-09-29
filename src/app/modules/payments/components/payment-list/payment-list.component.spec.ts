@@ -8,6 +8,8 @@ describe('PaymentListComponent', () => {
   const payment = (overrides: Partial<Payment> = {}): Payment => ({
     id: 1,
     memberId: 30111222,
+    memberName: 'Ana',
+    memberLastName: 'Garcia',
     amount: 7000,
     paymentDate: '2026-08-01 10:05:00',
     paymentMethod: 'TRANSFER',
@@ -30,6 +32,24 @@ describe('PaymentListComponent', () => {
     expect(text).toContain('01/08/2026');
     expect(text).toContain('Transferencia');
     expect(text).toContain('$7.000');
+  });
+
+  it('should not show the member by default', () => {
+    fixture.componentRef.setInput('payments', [payment()]);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('Ana Garcia');
+  });
+
+  it('should show the member first and the date with the method when asked', () => {
+    fixture.componentRef.setInput('payments', [payment()]);
+    fixture.componentRef.setInput('showMember', true);
+    fixture.detectChanges();
+
+    const lines = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll('li span span'),
+    ).map((line) => line.textContent?.trim());
+    expect(lines).toEqual(['Ana Garcia', '01/08/2026 · Transferencia']);
   });
 
   it('should render one row per payment', () => {

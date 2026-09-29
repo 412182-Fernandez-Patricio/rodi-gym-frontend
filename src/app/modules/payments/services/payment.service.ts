@@ -7,6 +7,8 @@ import { Payment, PaymentMethod } from '../models/payment.model';
 
 /** Filtros del endpoint de búsqueda. Todos opcionales, igual que en el backend. */
 export interface PaymentSearch {
+  /** Texto libre: busca en nombre, apellido, nombre completo y DNI del socio. */
+  search?: string;
   memberId?: number;
   paymentMethod?: PaymentMethod;
   /** Desde, inclusive. */
@@ -29,6 +31,7 @@ export class PaymentService {
 
 function buildParams(search: PaymentSearch): HttpParams {
   const entries: [string, string | number | undefined][] = [
+    ['search', search.search?.trim() || undefined],
     ['member_id', search.memberId],
     ['payment_method', search.paymentMethod],
     ['from', search.from],
