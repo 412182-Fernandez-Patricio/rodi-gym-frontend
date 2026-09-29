@@ -1,6 +1,6 @@
 # 002 · Listado de pagos
 
-**Estado:** Aprobada · **Repo:** frontend · **Rama:** `feature/payments-list`
+**Estado:** Implementada · **Repo:** frontend · **Rama:** `feature/payments-list`
 
 Se apoya en el contrato de `rodi-gym-backend/docs/specs/002-listado-de-pagos.md`.
 
@@ -134,7 +134,7 @@ resto.
 - [x] Probarlo contra el backend con la rama `feature/payments-list` (lo levanta
   el usuario).
 - [x] Actualizar `CLAUDE.md` (estado de las pantallas).
-- [ ] Pasar esta spec a **Implementada**.
+- [x] Pasar esta spec a **Implementada**.
 
 ## Pendientes
 
