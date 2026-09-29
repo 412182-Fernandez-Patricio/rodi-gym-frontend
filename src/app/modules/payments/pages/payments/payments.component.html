@@ -1,2 +1,50 @@
-<h1>Pagos</h1>
-<p>Control de cuotas y estados de pago.</p>
+<label class="relative mb-3 block">
+  <span class="sr-only">Buscar pago por socio</span>
+  <app-icon
+    name="search"
+    class="pointer-events-none absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-[20px] text-muted" />
+  <input
+    type="search"
+    placeholder="Buscar por socio o DNI..."
+    [value]="searchTerm()"
+    (input)="onSearch($any($event.target).value)"
+    class="w-full rounded-full border border-line bg-surface py-2.5 pr-4 pl-10 text-[14px] text-ink-strong outline-none placeholder:text-muted focus:border-accent" />
+</label>
+
+<div class="mb-3 flex gap-2 overflow-x-auto pb-1">
+  @for (filter of filters; track filter.label) {
+    <button
+      type="button"
+      (click)="selectMethod(filter.method)"
+      [attr.aria-pressed]="method() === filter.method"
+      [class]="chipClass(filter.method)">
+      {{ filter.label }}
+    </button>
+  }
+</div>
+
+@if (loadFailed() && !payments().length) {
+  <p class="my-8 text-center text-sm text-muted">No se pudieron cargar los pagos.</p>
+} @else if (payments().length) {
+  <app-payment-list [payments]="payments()" [showMember]="true" />
+
+  @if (!isLastPage()) {
+    <div class="mt-3.5 text-center">
+      <button
+        type="button"
+        (click)="loadMore()"
+        [disabled]="loading()"
+        class="rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-semibold text-ink not-disabled:cursor-pointer [-webkit-tap-highlight-color:transparent]">
+        {{ loading() ? 'Cargando…' : 'Cargar más' }}
+      </button>
+    </div>
+  } @else if (total()) {
+    <p class="mt-3.5 mb-0 text-center text-[11px] text-muted">
+      {{ total() }} pago{{ total() === 1 ? '' : 's' }}
+    </p>
+  }
+} @else if (loading()) {
+  <p class="my-8 text-center text-sm text-muted">Cargando…</p>
+} @else {
+  <p class="my-8 text-center text-sm text-muted">No hay pagos que coincidan.</p>
+}

@@ -9,7 +9,7 @@ Angular 20 standalone · signals · Tailwind v4 · **sin Angular Material**
 
 ```bash
 npx ng build
-npx ng test --watch=false --browsers=ChromeHeadless   # 64 tests
+npx ng test --watch=false --browsers=ChromeHeadless   # 81 tests
 ```
 
 **No levantar el dev server por iniciativa propia** — lo hace el usuario, para
@@ -25,7 +25,7 @@ tener control de los logs. Si hace falta ver una salida concreta, pedírselo.
 | **Perfil** (`/members/:id`) | Calendario de asistencia navegable + últimos pagos |
 | **Ingresos** (`/check-in`) | Contador del día y registro con motivos en español |
 | **Inicio** (`/dashboard`) | Placeholder |
-| **Pagos** (`/payments`) | Placeholder |
+| **Pagos** (`/payments`) | Listado con buscador por socio, chips por medio de pago y "Cargar más" |
 
 ## Convenciones ya establecidas
 
@@ -98,10 +98,13 @@ Las búsquedas de socios, pagos y check-ins devuelven un **sobre paginado**
 
 ## Pendientes
 
-- **Inicio y Pagos** siguen siendo placeholders. Cuando se arme Inicio, va a querer
+- **Inicio** sigue siendo un placeholder. Cuando se arme, va a querer
   los números del día: ahí conviene un `GET /checkins/summary` en el backend en vez
   de que cada pantalla haga sus dos consultas.
+- **Registrar un pago** desde Pagos: spec siguiente a la 002.
 - Desde el perfil, un **"Ver todos"** que lleve a Pagos filtrado por ese socio.
+- Socios y Pagos repiten el buscador, los chips y la paginación acumulada. Con
+  una tercera pantalla así, conviene extraerlo.
 - Filtros pendientes en Socios: **ordenar por vencimiento** (el endpoint ya acepta
   `sort`, es solo frontend) y **"vencen esta semana"** (necesita backend).
 - La pantalla de Ingresos pide el padrón entero para resolver nombres. Si crece, lo

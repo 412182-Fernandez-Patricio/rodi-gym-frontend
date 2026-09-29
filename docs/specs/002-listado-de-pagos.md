@@ -37,7 +37,8 @@ entero.
 - **R2.** Cada pago muestra el **nombre y apellido** del socio, la fecha
   (dd/mm/aaaa), el medio de pago y el monto.
 - **R3.** El buscador consulta **300 ms después** de que el usuario deja de
-  tipear, y no repite la consulta si el texto no cambió.
+  tipear, y no repite la consulta si el texto no cambió. Se compara **recortado**:
+  `"ana"` y `"ana "` son el mismo criterio.
 - **R4.** Los chips filtran por medio de pago. "Todos" no filtra y es el
   seleccionado al entrar. El chip activo tiene `aria-pressed="true"`.
 - **R5.** El buscador y los chips se combinan.
@@ -95,8 +96,8 @@ Cada pago, ya en camelCase por el interceptor:
 ### Página `payments`
 
 - Mismo esquema que `member-list`: `searchTerm` y `method` como signals,
-  `combineLatest` de los dos con `debounceTime(300)` y `distinctUntilChanged` en
-  el texto, y un `switchMap` para el criterio y otro para "Cargar más" (R6, R7).
+  `combineLatest` de los dos con `debounceTime(300)` y `distinctUntilChanged` sobre
+  el texto **recortado** (R3), y un `switchMap` para el criterio y otro para "Cargar más" (R6, R7).
 - `catchError` va **dentro** del `switchMap` (R10), y al fallar "Cargar más" se
   deshace el avance de página (R11).
 - Chips: `{ label, method: PaymentMethod | null }`, con las etiquetas tomadas de
@@ -112,7 +113,8 @@ Cada pago, ya en camelCase por el interceptor:
 |---|---|
 | Servicio | `payment.service.spec.ts`: `search` recortado sale como parámetro, y en blanco no sale. |
 | R2, R12 | `payment-list.component.spec.ts`: con `showMember` muestra el nombre; sin él, no. |
-| R1, R3 | `payments.component.spec.ts`: la primera consulta sale con `size=20`; tipear consulta una vez pasado el debounce. |
+| R1, R3 | `payments.component.spec.ts`: la primera consulta sale con `size=20`; tipear consulta una vez pasado el debounce; agregar un espacio al final no vuelve a consultar. |
+| R7 | spec de la página: con una consulta pendiente, un criterio nuevo la **cancela** y solo se muestra la respuesta nueva. |
 | R4, R5 | spec de la página: el chip manda `payment_method` y conserva `search`; "Todos" no lo manda. |
 | R6, R8 | spec de la página: "Cargar más" pide `page=1` y acumula; un chip nuevo reemplaza y vuelve a `page=0`. |
 | R9, R10 | spec de la página: con un 500 aparece el mensaje de error, y un chip después vuelve a consultar. |
@@ -123,15 +125,15 @@ resto.
 
 ## Tareas
 
-- [ ] `Payment` y `PaymentSearch` con los campos nuevos, más su spec.
-- [ ] `showMember` en `payment-list`, más su spec.
-- [ ] Página `payments` con buscador, chips y paginación.
-- [ ] Specs de la página.
-- [ ] `npx ng build` y `npx ng test --watch=false --browsers=ChromeHeadless` en
+- [x] `Payment` y `PaymentSearch` con los campos nuevos, más su spec.
+- [x] `showMember` en `payment-list`, más su spec.
+- [x] Página `payments` con buscador, chips y paginación.
+- [x] Specs de la página.
+- [x] `npx ng build` y `npx ng test --watch=false --browsers=ChromeHeadless` en
   verde.
-- [ ] Probarlo contra el backend con la rama `feature/payments-list` (lo levanta
+- [x] Probarlo contra el backend con la rama `feature/payments-list` (lo levanta
   el usuario).
-- [ ] Actualizar `CLAUDE.md` (estado de las pantallas).
+- [x] Actualizar `CLAUDE.md` (estado de las pantallas).
 - [ ] Pasar esta spec a **Implementada**.
 
 ## Pendientes

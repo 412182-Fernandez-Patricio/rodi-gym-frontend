@@ -7,6 +7,8 @@ export type PaymentMethod = 'CASH' | 'TRANSFER' | 'DEBIT';
 export interface Payment {
   id: number;
   memberId: number;
+  memberName: string;
+  memberLastName: string;
   amount: number;
   paymentDate: string;
   paymentMethod: PaymentMethod;

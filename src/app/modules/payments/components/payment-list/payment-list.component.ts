@@ -8,8 +8,8 @@ import {
 
 interface PaymentRow {
   id: number;
-  date: string;
-  method: string;
+  title: string;
+  detail: string;
   amount: string;
 }
 
@@ -27,13 +27,23 @@ interface PaymentRow {
 export class PaymentListComponent {
   readonly payments = input.required<Payment[]>();
   readonly emptyMessage = input('Todavía no hay pagos registrados.');
+  /**
+   * Muestra quién pagó, para el listado general. En el perfil sobra: todos los
+   * pagos son del mismo socio.
+   */
+  readonly showMember = input(false);
 
   readonly rows = computed<PaymentRow[]>(() =>
-    this.payments().map((payment) => ({
-      id: payment.id,
-      date: formatPaymentDate(payment.paymentDate),
-      method: PAYMENT_METHOD_LABELS[payment.paymentMethod],
-      amount: formatAmount(payment.amount),
-    })),
+    this.payments().map((payment) => {
+      const date = formatPaymentDate(payment.paymentDate);
+      const method = PAYMENT_METHOD_LABELS[payment.paymentMethod];
+
+      return {
+        id: payment.id,
+        title: this.showMember() ? `${payment.memberName} ${payment.memberLastName}` : date,
+        detail: this.showMember() ? `${date} · ${method}` : method,
+        amount: formatAmount(payment.amount),
+      };
+    }),
   );
 }
