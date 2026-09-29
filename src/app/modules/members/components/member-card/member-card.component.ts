@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { RouterLink } from '@angular/router';
-import { Member, MemberStatus, resolveMemberStatus } from '../../models/member.model';
-
-const STATUS_LABELS: Record<MemberStatus, string> = {
-  active: 'Al día',
-  expired: 'Vencido',
-  inactive: 'Inactivo',
-};
+import {
+  MEMBER_STATUS_LABELS,
+  Member,
+  MemberStatus,
+  resolveMemberStatus,
+} from '../../models/member.model';
 
 const BADGE_COLORS: Record<MemberStatus, string> = {
   active: 'bg-accent-soft text-accent-strong',
@@ -28,7 +27,7 @@ export class MemberCardComponent {
   readonly contact = output<Member>();
 
   readonly status = computed<MemberStatus>(() => resolveMemberStatus(this.member()));
-  readonly statusLabel = computed(() => STATUS_LABELS[this.status()]);
+  readonly statusLabel = computed(() => MEMBER_STATUS_LABELS[this.status()]);
   readonly fullName = computed(() => `${this.member().name} ${this.member().lastName}`);
   readonly initials = computed(() => {
     const { name, lastName } = this.member();

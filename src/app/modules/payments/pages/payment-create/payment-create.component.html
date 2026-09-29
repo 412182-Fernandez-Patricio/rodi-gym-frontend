@@ -1,0 +1,127 @@
+<section>
+  <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">Socio</h2>
+
+  @if (member(); as member) {
+    <div class="flex items-center gap-3 rounded-[14px] border border-line bg-surface px-4 py-3.5">
+      <span class="flex min-w-0 flex-1 flex-col gap-1">
+        <span class="flex items-center gap-2">
+          <span class="truncate text-[15px] font-semibold text-ink-strong">
+            {{ member.name }} {{ member.lastName }}
+          </span>
+          <span [class]="statusClass()">{{ statusLabel() }}</span>
+        </span>
+        <span class="truncate text-[13px] text-muted">{{ memberDetail() }}</span>
+      </span>
+
+      <button
+        type="button"
+        (click)="changeMember()"
+        [disabled]="saving()"
+        class="shrink-0 rounded-full border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold text-ink not-disabled:cursor-pointer [-webkit-tap-highlight-color:transparent]">
+        Cambiar
+      </button>
+    </div>
+
+    @if (warning(); as warning) {
+      <p
+        role="status"
+        class="mt-2 mb-0 rounded-xl bg-neutral-soft px-3.5 py-2.5 text-[13px] text-ink">
+        {{ warning }}
+      </p>
+    }
+  } @else if (loadingMember()) {
+    <p class="my-4 text-center text-sm text-muted">Cargando socio…</p>
+  } @else {
+    @if (memberNotice(); as notice) {
+      <p
+        role="alert"
+        class="mt-0 mb-2 rounded-xl bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger-strong">
+        {{ notice }}
+      </p>
+    }
+
+    <label class="relative block">
+      <span class="sr-only">Buscar socio</span>
+      <app-icon
+        name="search"
+        class="pointer-events-none absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-[20px] text-muted" />
+      <input
+        type="search"
+        placeholder="Nombre, apellido o DNI..."
+        autocomplete="off"
+        [value]="searchTerm()"
+        (input)="onSearch($any($event.target).value)"
+        class="w-full rounded-full border border-line bg-surface py-2.5 pr-4 pl-10 text-[14px] text-ink-strong outline-none placeholder:text-muted focus:border-accent" />
+    </label>
+
+    @if (searchFailed()) {
+      <p class="my-3 text-center text-sm text-muted">No se pudo buscar. Probá de nuevo.</p>
+    } @else if (results().length) {
+      <ul class="mt-2 mb-0 flex list-none flex-col gap-1.5 p-0">
+        @for (result of results(); track result.id) {
+          <li>
+            <button
+              type="button"
+              (click)="selectMember(result)"
+              class="flex w-full cursor-pointer flex-col items-start gap-0.5 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-left [-webkit-tap-highlight-color:transparent] active:bg-neutral-soft">
+              <span class="text-[14px] font-semibold text-ink-strong">
+                {{ result.name }} {{ result.lastName }}
+              </span>
+              <span class="text-[12px] text-muted">DNI {{ formatDni(result.id) }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+    } @else if (searched()) {
+      <p class="my-3 text-center text-sm text-muted">No hay socios que coincidan.</p>
+    }
+  }
+</section>
+
+<section class="mt-6">
+  <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+    Medio de pago
+  </h2>
+
+  <div class="flex gap-2">
+    @for (option of methods; track option.method) {
+      <button
+        type="button"
+        (click)="selectMethod(option.method)"
+        [attr.aria-pressed]="method() === option.method"
+        [class]="methodClass(option.method)">
+        {{ option.label }}
+      </button>
+    }
+  </div>
+</section>
+
+@if (priceFailed()) {
+  <div
+    role="alert"
+    class="mt-6 flex items-center justify-between gap-3 rounded-xl bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger-strong">
+    <span>No se pudo cargar el monto de la cuota.</span>
+    <button
+      type="button"
+      (click)="loadPrice()"
+      class="shrink-0 cursor-pointer border-0 bg-transparent p-0 text-[13px] font-semibold text-danger-strong underline">
+      Reintentar
+    </button>
+  </div>
+}
+
+@if (saveFailed()) {
+  <p
+    role="alert"
+    class="mt-6 mb-0 rounded-xl bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger-strong">
+    No se pudo registrar el pago. Probá de nuevo.
+  </p>
+}
+
+<button
+  type="button"
+  (click)="pay()"
+  [disabled]="!canPay()"
+  class="mt-6 w-full rounded-xl border-0 bg-accent py-3 text-[15px] font-bold text-on-dark not-disabled:cursor-pointer disabled:opacity-60 [-webkit-tap-highlight-color:transparent] active:not-disabled:bg-accent-strong">
+  {{ payLabel() }}
+</button>

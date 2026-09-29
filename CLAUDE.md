@@ -9,7 +9,7 @@ Angular 20 standalone · signals · Tailwind v4 · **sin Angular Material**
 
 ```bash
 npx ng build
-npx ng test --watch=false --browsers=ChromeHeadless   # 81 tests
+npx ng test --watch=false --browsers=ChromeHeadless   # 103 tests
 ```
 
 **No levantar el dev server por iniciativa propia** — lo hace el usuario, para
@@ -22,10 +22,11 @@ tener control de los logs. Si hace falta ver una salida concreta, pedírselo.
 |---|---|
 | **Socios** (`/members`) | Listado con buscador, chips de estado y "Cargar más" |
 | **Alta** (`/members/new`) | Formulario de socio; al guardar va a su perfil |
-| **Perfil** (`/members/:id`) | Calendario de asistencia navegable + últimos pagos |
+| **Perfil** (`/members/:id`) | Calendario de asistencia navegable + últimos pagos + "Registrar pago" |
 | **Ingresos** (`/check-in`) | Contador del día y registro con motivos en español |
 | **Inicio** (`/dashboard`) | Placeholder |
 | **Pagos** (`/payments`) | Listado con buscador por socio, chips por medio de pago y "Cargar más" |
+| **Registrar pago** (`/payments/new`) | Elegir socio (o `?member=<dni>` desde el perfil) y medio; el monto lo fija el backend |
 
 ## Convenciones ya establecidas
 
@@ -68,6 +69,14 @@ tener control de los logs. Si hace falta ver una salida concreta, pedírselo.
   que se construya la página entrante, o el título se filtra a la siguiente.
 - **`catchError` va dentro del `switchMap`**, nunca afuera: afuera, un error
   completa el stream y los cambios siguientes dejan de pedir nada, sin aviso.
+- **No duplicar una pantalla en el historial.** Al terminar un formulario que se
+  abrió desde el perfil, se vuelve con `Location.back()`: un `navigate` con
+  `replaceUrl` dejaría el perfil dos veces seguidas y el primer "volver" del sistema
+  no haría nada (misma URL, el router la ignora). Sin pantalla previa
+  (`router.lastSuccessfulNavigation?.previousNavigation` en `null`), `navigate`
+  con `replaceUrl`. Ver `payment-create`.
+- Las etiquetas del estado del socio salen de `MEMBER_STATUS_LABELS`
+  (`member.model.ts`), no se copian en cada componente.
 - **Las rutas fijas van antes que las de parámetro**: `members/new` está antes de
   `members/:id`. Al revés, el router abre el perfil de un socio con id `new`.
 - El botón del sistema operativo para volver **ya funciona solo**: el router usa la
@@ -101,7 +110,6 @@ Las búsquedas de socios, pagos y check-ins devuelven un **sobre paginado**
 - **Inicio** sigue siendo un placeholder. Cuando se arme, va a querer
   los números del día: ahí conviene un `GET /checkins/summary` en el backend en vez
   de que cada pantalla haga sus dos consultas.
-- **Registrar un pago** desde Pagos: spec siguiente a la 002.
 - Desde el perfil, un **"Ver todos"** que lleve a Pagos filtrado por ese socio.
 - Socios y Pagos repiten el buscador, los chips y la paginación acumulada. Con
   una tercera pantalla así, conviene extraerlo.
@@ -109,10 +117,10 @@ Las búsquedas de socios, pagos y check-ins devuelven un **sobre paginado**
   `sort`, es solo frontend) y **"vencen esta semana"** (necesita backend).
 - La pantalla de Ingresos pide el padrón entero para resolver nombres. Si crece, lo
   correcto es que el backend mande el nombre en el propio check-in.
-- Después del alta, **registrar el primer pago** (cuando exista Pagos). Hoy el
-  socio nuevo queda como Deudor y su perfil dice "Vencido".
 - Del mockup faltan la **fecha de alta** del socio y el período que cubre cada pago:
   ninguno de los dos existe en el backend.
+- **Anular un pago** cargado por error: hoy solo se arregla a mano en la base.
+- Si cobrar en el mostrador pide más velocidad, recordar el último medio de pago.
 - La PWA depende de **Google Fonts por CDN**, así que sin conexión los íconos no
   cargan. `index.html` además carga una segunda familia que no usa nadie.
 

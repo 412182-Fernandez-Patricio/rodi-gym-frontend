@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PageResponse } from '../../../shared/models/page-response.model';
-import { Payment, PaymentMethod } from '../models/payment.model';
+import { Payment, PaymentCreate, PaymentMethod } from '../models/payment.model';
 
 /** Filtros del endpoint de búsqueda. Todos opcionales, igual que en el backend. */
 export interface PaymentSearch {
@@ -26,6 +26,11 @@ export class PaymentService {
 
   searchPayments(search: PaymentSearch = {}): Observable<PageResponse<Payment>> {
     return this.http.get<PageResponse<Payment>>(this.baseUrl, { params: buildParams(search) });
+  }
+
+  /** Responde 201 con el pago; 404 si el socio no existe. */
+  createPayment(payment: PaymentCreate): Observable<Payment> {
+    return this.http.post<Payment>(this.baseUrl, payment);
   }
 }
 

@@ -1,6 +1,6 @@
 # 003 · Registro de pagos
 
-**Estado:** Aprobada · **Repo:** frontend · **Rama:** `feature/register-payment`
+**Estado:** Implementada · **Repo:** frontend · **Rama:** `feature/register-payment`
 
 Se apoya en el contrato de `rodi-gym-backend/docs/specs/003-registro-de-pagos.md`.
 
@@ -38,6 +38,7 @@ de más.
 ### Entradas
 
 - **R1.** En Pagos, el botón flotante "Registrar pago" navega a `/payments/new`.
+  El listado deja lugar abajo para que el botón no tape "Cargar más" ni el total.
 - **R2.** En el perfil, un botón "Registrar pago" navega a
   `/payments/new?member=<dni>`.
 - **R3.** El header dice "Registrar pago". La flecha de volver lleva al perfil
@@ -69,7 +70,8 @@ de más.
 - **R10.** El monto sale de `GET /config/monthly-price` y se muestra con
   `formatAmount` ("$7.000").
 - **R11.** Si el monto no se pudo cargar, se avisa y **no se puede cobrar**: el
-  administrador tiene que ver el monto antes de confirmar.
+  administrador tiene que ver el monto antes de confirmar. El aviso tiene un botón
+  **"Reintentar"** que vuelve a pedirlo.
 
 ### Cobrar
 
@@ -77,9 +79,16 @@ de más.
   socio, el medio de pago o el monto.
 - **R13.** Mientras la request está en curso, el botón está deshabilitado y dice
   "Cobrando…". Dos toques salen como **un solo POST**.
-- **R14.** Con el 201, navega al **perfil del socio** con `replaceUrl`, así el
-  botón de volver no regresa al formulario. El perfil ya muestra el nuevo
+- **R14.** Con el 201 se va al **perfil del socio**, sin dejar el formulario en el
+  historial ni duplicar el perfil. El perfil se vuelve a cargar y muestra el nuevo
   vencimiento y el pago en "Últimos pagos".
+  - Si se llegó con `?member` desde otra pantalla de la app (el perfil),
+    `Location.back()`: vuelve a esa entrada del historial.
+  - Si no (desde Pagos, o con un link directo sin historial), `navigate` al
+    perfil con `replaceUrl`.
+  - **Por qué:** con `replaceUrl` desde el perfil el historial quedaba
+    `/members/X`, `/members/X`. El primer "volver" del sistema no hacía nada
+    visible (misma URL, el router la ignora) y hacía falta un segundo.
 - **R15.** Con un 404, avisa "El socio ya no existe." y vuelve al buscador.
 - **R16.** Con un 400, un 500 o un error de red, muestra un aviso general y
   **conserva** el socio y el medio elegidos, para reintentar.
@@ -120,6 +129,12 @@ de más.
   navega al perfil y trae el botón de contacto, y acá tocar tiene que elegir.
 - El estado del socio se calcula con `resolveMemberStatus` y las fechas con
   `formatIsoDate`, igual que en el resto de la app.
+- Las etiquetas del estado ("Al día", "Vencido", "Inactivo") ya estaban copiadas
+  en `member-card` y en el perfil. Pasan a `MEMBER_STATUS_LABELS` en
+  `member.model.ts`, y las usan las tres pantallas.
+- "Hay historial de la app" se decide con
+  `router.lastSuccessfulNavigation?.previousNavigation`: es `null` cuando
+  `/payments/new` fue la primera pantalla cargada.
 - Medios de pago: tres botones con `aria-pressed`, con la misma estética que los
   chips de filtro.
 - **Descartado:** un paso de confirmación aparte ("¿Cobrar $7.000 a Ana
@@ -134,6 +149,8 @@ de más.
 ### Pagos
 
 - `<app-fab-button icon="add" label="Registrar pago" link="/payments/new" />`.
+- `pb-14` al final del listado, como en Socios, para que el botón no tape lo
+  último.
 
 ## Pruebas
 
@@ -145,25 +162,25 @@ de más.
 | R4 | spec de la página: tipear busca con `size=5` tras el debounce; tocar un resultado lo elige y no navega. |
 | R5, R6 | spec de la página: con `?member` carga y elige; con un 404 muestra el aviso y el buscador; "Cambiar" vuelve al buscador. |
 | R7, R8 | spec de la página: aviso con socio al día, con socio inactivo y ningún aviso con socio vencido. |
-| R9–R12 | spec de la página: sin medio elegido el botón está deshabilitado; el texto del botón lleva el monto; si falla el config, no se puede cobrar. |
+| R9–R12 | spec de la página: sin medio elegido el botón está deshabilitado; el texto del botón lleva el monto; si falla el config, no se puede cobrar, y "Reintentar" lo vuelve a pedir. |
 | R13 | spec de la página: dos clicks con la request pendiente → un solo POST. |
-| R14 | spec de la página: 201 → `navigate(['/members', id], { replaceUrl: true })`. |
+| R14 | spec de la página: 201 sin historial previo → `navigate(['/members', id], { replaceUrl: true })`; 201 llegando desde el perfil → `Location.back()`. |
 | R15, R16 | spec de la página: 404 vuelve al buscador; 500 muestra el aviso y conserva la selección. |
 
 Los specs con HTTP registran el interceptor y responden en snake_case.
 
 ## Tareas
 
-- [ ] `PaymentService.createPayment` y `ConfigService`, más sus specs.
-- [ ] Ruta `payments/new`.
-- [ ] Página `payment-create`.
-- [ ] Botón flotante en Pagos y botón en el perfil.
-- [ ] Specs.
-- [ ] `npx ng build` y `npx ng test --watch=false --browsers=ChromeHeadless` en
+- [x] `PaymentService.createPayment` y `ConfigService`, más sus specs.
+- [x] Ruta `payments/new`.
+- [x] Página `payment-create`.
+- [x] Botón flotante en Pagos y botón en el perfil.
+- [x] Specs.
+- [x] `npx ng build` y `npx ng test --watch=false --browsers=ChromeHeadless` en
   verde.
-- [ ] Probarlo contra el backend con la rama `feature/register-payment` (lo
+- [x] Probarlo contra el backend con la rama `feature/register-payment` (lo
   levanta el usuario).
-- [ ] Actualizar `CLAUDE.md` (pantallas y pendientes) y pasar esta spec a
+- [x] Actualizar `CLAUDE.md` (pantallas y pendientes) y pasar esta spec a
   **Implementada**.
 
 ## Pendientes

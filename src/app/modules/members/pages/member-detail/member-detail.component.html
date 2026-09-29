@@ -36,9 +36,17 @@
   </section>
 
   <section class="mt-6">
-    <h2 class="mt-0 mb-2 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
-      Últimos pagos
-    </h2>
+    <div class="mb-2 flex items-center justify-between gap-2">
+      <h2 class="m-0 text-[11px] font-bold tracking-[0.06em] text-muted uppercase">
+        Últimos pagos
+      </h2>
+      <a
+        routerLink="/payments/new"
+        [queryParams]="{ member: memberId }"
+        class="flex items-center rounded-full bg-accent px-3 py-1.5 text-[12px] font-bold text-on-dark no-underline [-webkit-tap-highlight-color:transparent] active:bg-accent-strong">
+        Registrar pago
+      </a>
+    </div>
 
     @if (paymentsFailed()) {
       <p class="my-4 text-center text-sm text-muted">No se pudieron cargar los pagos.</p>

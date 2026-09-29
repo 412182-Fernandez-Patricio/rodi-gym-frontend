@@ -101,6 +101,19 @@ describe('MemberDetailComponent', () => {
     expect(text).toContain('$7.000');
   });
 
+  it('should link to register a payment for this member', () => {
+    fixture.detectChanges();
+    flushMember();
+    flushPayments();
+    flushAttendance();
+    fixture.detectChanges();
+
+    const link = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('a')).find(
+      (a) => a.textContent?.trim() === 'Registrar pago',
+    ) as HTMLAnchorElement;
+    expect(link.getAttribute('href')).toBe('/payments/new?member=30111222');
+  });
+
   it('should keep the profile usable when payments fail', () => {
     fixture.detectChanges();
     flushMember();

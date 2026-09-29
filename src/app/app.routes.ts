@@ -29,6 +29,11 @@ export const routes: Routes = [
         loadComponent: () => import('./modules/members/pages/member-detail/member-detail.component').then(m => m.MemberDetailComponent),
       },
       {
+        // Antes que cualquier 'payments/:algo', por la misma razón que members/new.
+        path: 'payments/new',
+        loadComponent: () => import('./modules/payments/pages/payment-create/payment-create.component').then(m => m.PaymentCreateComponent),
+      },
+      {
         path: 'payments',
         loadComponent: () => import('./modules/payments/pages/payments/payments.component').then(m => m.PaymentsComponent),
       },

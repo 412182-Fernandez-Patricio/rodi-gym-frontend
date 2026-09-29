@@ -48,6 +48,15 @@ describe('PaymentService', () => {
     request.flush(emptyPage);
   });
 
+  it('should create a payment sending the body in snake_case', () => {
+    service.createPayment({ memberId: 30111222, paymentMethod: 'DEBIT' }).subscribe();
+
+    const request = httpMock.expectOne('/api/payments');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({ member_id: 30111222, payment_method: 'DEBIT' });
+    request.flush(null, { status: 201, statusText: 'Created' });
+  });
+
   it('should bring the member name in camelCase', () => {
     let names: string[] = [];
 

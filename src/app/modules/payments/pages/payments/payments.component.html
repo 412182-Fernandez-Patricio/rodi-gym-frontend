@@ -26,25 +26,30 @@
 @if (loadFailed() && !payments().length) {
   <p class="my-8 text-center text-sm text-muted">No se pudieron cargar los pagos.</p>
 } @else if (payments().length) {
-  <app-payment-list [payments]="payments()" [showMember]="true" />
+  <!-- pb-14: lugar para que el botón flotante no tape lo último. -->
+  <div class="pb-14">
+    <app-payment-list [payments]="payments()" [showMember]="true" />
 
-  @if (!isLastPage()) {
-    <div class="mt-3.5 text-center">
-      <button
-        type="button"
-        (click)="loadMore()"
-        [disabled]="loading()"
-        class="rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-semibold text-ink not-disabled:cursor-pointer [-webkit-tap-highlight-color:transparent]">
-        {{ loading() ? 'Cargando…' : 'Cargar más' }}
-      </button>
-    </div>
-  } @else if (total()) {
-    <p class="mt-3.5 mb-0 text-center text-[11px] text-muted">
-      {{ total() }} pago{{ total() === 1 ? '' : 's' }}
-    </p>
-  }
+    @if (!isLastPage()) {
+      <div class="mt-3.5 text-center">
+        <button
+          type="button"
+          (click)="loadMore()"
+          [disabled]="loading()"
+          class="rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-semibold text-ink not-disabled:cursor-pointer [-webkit-tap-highlight-color:transparent]">
+          {{ loading() ? 'Cargando…' : 'Cargar más' }}
+        </button>
+      </div>
+    } @else if (total()) {
+      <p class="mt-3.5 mb-0 text-center text-[11px] text-muted">
+        {{ total() }} pago{{ total() === 1 ? '' : 's' }}
+      </p>
+    }
+  </div>
 } @else if (loading()) {
   <p class="my-8 text-center text-sm text-muted">Cargando…</p>
 } @else {
   <p class="my-8 text-center text-sm text-muted">No hay pagos que coincidan.</p>
 }
+
+<app-fab-button icon="add" label="Registrar pago" link="/payments/new" />
