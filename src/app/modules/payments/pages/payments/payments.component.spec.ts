@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { PaymentsComponent } from './payments.component';
 import { caseConversionInterceptor } from '../../../../shared/interceptors/case-conversion.interceptor';
 
@@ -61,6 +62,7 @@ describe('PaymentsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PaymentsComponent],
       providers: [
+        provideRouter([]),
         provideHttpClient(withInterceptors([caseConversionInterceptor])),
         provideHttpClientTesting(),
       ],
@@ -218,6 +220,16 @@ describe('PaymentsComponent', () => {
 
     expect(text()).toContain('Ana Garcia');
     expect(text()).not.toContain('No se pudieron cargar');
+  }));
+
+  it('should link the add button to the payment form, leaving room for it', fakeAsync(() => {
+    enter([payment(1, 'Ana', 'Garcia')]);
+
+    const add = (fixture.nativeElement as HTMLElement).querySelector(
+      'a[aria-label="Registrar pago"]',
+    ) as HTMLAnchorElement;
+    expect(add.getAttribute('href')).toBe('/payments/new');
+    expect((fixture.nativeElement as HTMLElement).querySelector('.pb-14')).not.toBeNull();
   }));
 
   it('should not skip a page when loading more fails', fakeAsync(() => {

@@ -21,6 +21,12 @@ export interface MemberCreate {
 
 export type MemberStatus = 'active' | 'expired' | 'inactive';
 
+export const MEMBER_STATUS_LABELS: Record<MemberStatus, string> = {
+  active: 'Al día',
+  expired: 'Vencido',
+  inactive: 'Inactivo',
+};
+
 /**
  * Deriva el estado que se muestra en el badge. Replica el criterio de
  * CheckinServiceImpl: sin membresía o con la fecha pasada cuenta como vencido.

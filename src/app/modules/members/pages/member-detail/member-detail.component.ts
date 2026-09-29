@@ -1,8 +1,9 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, switchMap } from 'rxjs';
 import {
+  MEMBER_STATUS_LABELS,
   Member,
   MemberStatus,
   formatDni,
@@ -20,12 +21,6 @@ import { PageHeaderService } from '../../../../shared/services/page-header.servi
 
 const PAYMENTS_SHOWN = 5;
 
-const STATUS_LABELS: Record<MemberStatus, string> = {
-  active: 'Al día',
-  expired: 'Vencido',
-  inactive: 'Inactivo',
-};
-
 const STATUS_COLORS: Record<MemberStatus, string> = {
   active: 'bg-surface text-accent-strong',
   expired: 'bg-danger-soft text-danger-strong',
@@ -35,7 +30,7 @@ const STATUS_COLORS: Record<MemberStatus, string> = {
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [PaymentListComponent, AttendanceCalendarComponent],
+  imports: [PaymentListComponent, AttendanceCalendarComponent, RouterLink],
   templateUrl: './member-detail.component.html',
 })
 export class MemberDetailComponent {
@@ -45,7 +40,7 @@ export class MemberDetailComponent {
   private readonly attendanceService = inject(AttendanceService);
   private readonly pageHeader = inject(PageHeaderService);
 
-  private readonly memberId = Number(this.route.snapshot.paramMap.get('id'));
+  readonly memberId = Number(this.route.snapshot.paramMap.get('id'));
 
   readonly loadFailed = signal(false);
   readonly paymentsFailed = signal(false);
@@ -101,7 +96,7 @@ export class MemberDetailComponent {
 
   readonly statusLabel = computed(() => {
     const status = this.status();
-    return status ? STATUS_LABELS[status] : '';
+    return status ? MEMBER_STATUS_LABELS[status] : '';
   });
 
   readonly fullName = computed(() => {

@@ -14,6 +14,12 @@ export interface Payment {
   paymentMethod: PaymentMethod;
 }
 
+/** Cuerpo del cobro. El monto no va: lo fija el backend con la cuota vigente. */
+export interface PaymentCreate {
+  memberId: number;
+  paymentMethod: PaymentMethod;
+}
+
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   CASH: 'Efectivo',
   TRANSFER: 'Transferencia',

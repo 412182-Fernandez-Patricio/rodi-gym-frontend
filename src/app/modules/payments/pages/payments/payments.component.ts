@@ -12,6 +12,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { FabButtonComponent } from '../../../../shared/components/fab-button/fab-button.component';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { PaymentListComponent } from '../../components/payment-list/payment-list.component';
 import { PAYMENT_METHOD_LABELS, Payment, PaymentMethod } from '../../models/payment.model';
@@ -30,7 +31,7 @@ const TYPING_PAUSE_MS = 300;
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [PaymentListComponent, IconComponent],
+  imports: [PaymentListComponent, FabButtonComponent, IconComponent],
   templateUrl: './payments.component.html',
 })
 export class PaymentsComponent {
